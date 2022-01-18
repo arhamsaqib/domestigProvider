@@ -1,13 +1,8 @@
 import React from 'react';
-import {SafeAreaView, Text} from 'react-native';
+import {DomestigProvider} from './src/screens/main/domestig';
 
 const App = () => {
-  return (
-    <SafeAreaView style={{backgroundColor: 'white'}}>
-      <Text style={{fontSize: 30}}>Hi</Text>
-      <Text style={{fontSize: 30, fontFamily: 'Poppins-Bold'}}>Hi</Text>
-    </SafeAreaView>
-  );
+  return <DomestigProvider />;
 };
 
 export default App;
