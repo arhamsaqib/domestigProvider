@@ -9,7 +9,7 @@ import {ICONS} from '../../constants/icons';
 
 export const Onboarding3 = ({navigation}: any) => {
   function onNextPress() {
-    navigation.navigate('ob3');
+    navigation.navigate('auth');
   }
   return (
     <ImageBackground source={ICONS.onboarding3} style={styles.main}>
