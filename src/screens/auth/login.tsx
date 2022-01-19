@@ -1,18 +1,58 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BottomSheet} from '../../components/bottomSheet';
+import {MyTextInputWithIcon} from '../../components/textinputwithicon';
+import {FieldNameText} from '../../components/texts/fieldNameText';
 import {PageNameText} from '../../components/texts/pageNameText';
+import {TitleText} from '../../components/texts/titleText';
 import {GradientWrapper} from '../../helpers/gradientWrapper';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {COLORS} from '../../constants/colors';
+import {MyButton} from '../../components/button';
 
 export const Login = ({navigation}: any) => {
   return (
     <GradientWrapper>
       <SafeAreaView style={styles.heading}>
         <PageNameText style={{marginVertical: 20}} white>
-          Getting Started
+          Welcome Back
         </PageNameText>
       </SafeAreaView>
-      <BottomSheet style={{marginTop: '5%'}}></BottomSheet>
+      <BottomSheet style={{marginTop: '5%'}}>
+        <View style={{width: '90%', marginVertical: 20}}>
+          <TitleText>Login with</TitleText>
+        </View>
+        <View style={{width: '90%', marginBottom: 20}}>
+          <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
+          <MyTextInputWithIcon
+            placeholder="Enter your mail"
+            icon={
+              <Icon
+                name="mail-outline"
+                size={16}
+                color={COLORS.MAIN_BODYTEXT}
+              />
+            }
+          />
+        </View>
+        <View style={{width: '90%', marginBottom: 20}}>
+          <FieldNameText style={{marginBottom: 5}}>Password</FieldNameText>
+          <MyTextInputWithIcon
+            placeholder="Enter your password"
+            secureTextEntry
+            icon={
+              <Icon
+                name="lock-closed-outline"
+                size={16}
+                color={COLORS.MAIN_BODYTEXT}
+              />
+            }
+          />
+        </View>
+        <View style={{width: '90%', marginBottom: 20}}>
+          <MyButton title="Login Now" />
+        </View>
+      </BottomSheet>
     </GradientWrapper>
   );
 };
