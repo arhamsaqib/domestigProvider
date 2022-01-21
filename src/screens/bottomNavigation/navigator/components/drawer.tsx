@@ -38,14 +38,14 @@ export const Drawer = ({navigation}: any) => {
       onPress: () => navigation.navigate('earnings'),
     },
     {
-      name: 'Addresses',
-      iconName: 'location-outline',
-      onPress: () => navigation.navigate('addresses'),
+      name: 'Documents',
+      iconName: 'documents-outline',
+      onPress: () => navigation.navigate('documents'),
     },
     {
-      name: 'Payment',
-      iconName: 'card-outline',
-      onPress: () => navigation.navigate('payment'),
+      name: 'Services',
+      iconName: 'apps',
+      onPress: () => navigation.navigate('services'),
     },
     {
       name: 'Language',

@@ -1,12 +1,14 @@
-import React from 'react';
-import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {GlobalStyles} from '../../../../common/styles';
 import {BackIcon} from '../../../../components/backIcon';
+import {MyButton} from '../../../../components/button';
 import {PageNameText} from '../../../../components/texts/pageNameText';
-import {ICONS} from '../../../../constants/icons';
-import {PaymentCard} from './components/paymentCard';
+import {AddAddressCard} from './components/addAddressCard';
+import {AddressCard} from './components/addressCard';
 
-export const Payment = ({navigation}: any) => {
+export const Documents = ({navigation}: any) => {
+  const [show, setShow] = useState(false);
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
       <View style={styles.topRow}>
@@ -14,29 +16,21 @@ export const Payment = ({navigation}: any) => {
           <BackIcon black onPress={() => navigation.goBack()} />
         </View>
         <View style={{width: '90%', alignItems: 'center', marginLeft: '-15%'}}>
-          <PageNameText>Payment</PageNameText>
+          <PageNameText>Documents</PageNameText>
         </View>
       </View>
       <View style={{width: '90%', marginTop: 10}}>
-        <PaymentCard
-          name="Credit Card"
-          switch
-          editable
-          icon={<Image source={ICONS.card} style={{height: 17, width: 21}} />}
-        />
-        <PaymentCard
-          name="Cash"
-          default
-          icon={<Image source={ICONS.cash} style={{height: 21, width: 21}} />}
-        />
-        <PaymentCard
-          name="Wallet"
-          default
-          icon={
-            <Image source={ICONS.wallet} style={{height: 19.6, width: 21}} />
-          }
-        />
+        <AddressCard />
+        <AddressCard />
+        <AddressCard />
       </View>
+      <AddAddressCard
+        modalVisibility={show}
+        onOutsidePress={() => setShow(false)}
+      />
+      {/* <View style={styles.bottom}>
+        <MyButton title="Add new address" onPress={() => setShow(true)} />
+      </View> */}
     </SafeAreaView>
   );
 };

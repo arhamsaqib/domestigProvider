@@ -1,14 +1,12 @@
-import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import React from 'react';
+import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
 import {GlobalStyles} from '../../../../common/styles';
 import {BackIcon} from '../../../../components/backIcon';
-import {MyButton} from '../../../../components/button';
 import {PageNameText} from '../../../../components/texts/pageNameText';
-import {AddAddressCard} from './components/addAddressCard';
-import {AddressCard} from './components/addressCard';
+import {ICONS} from '../../../../constants/icons';
+import {PaymentCard} from './components/paymentCard';
 
-export const Addresses = ({navigation}: any) => {
-  const [show, setShow] = useState(false);
+export const Services = ({navigation}: any) => {
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
       <View style={styles.topRow}>
@@ -16,20 +14,13 @@ export const Addresses = ({navigation}: any) => {
           <BackIcon black onPress={() => navigation.goBack()} />
         </View>
         <View style={{width: '90%', alignItems: 'center', marginLeft: '-15%'}}>
-          <PageNameText>Addresses</PageNameText>
+          <PageNameText>Services</PageNameText>
         </View>
       </View>
       <View style={{width: '90%', marginTop: 10}}>
-        <AddressCard />
-        <AddressCard />
-        <AddressCard />
-      </View>
-      <AddAddressCard
-        modalVisibility={show}
-        onOutsidePress={() => setShow(false)}
-      />
-      <View style={styles.bottom}>
-        <MyButton title="Add new address" onPress={() => setShow(true)} />
+        <PaymentCard name="En-Suites & Cloakroom" />
+        <PaymentCard name="En-Suites & Cloakroom" showTiming />
+        <PaymentCard name="En-Suites & Cloakroom" />
       </View>
     </SafeAreaView>
   );

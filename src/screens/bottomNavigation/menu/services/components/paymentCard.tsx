@@ -8,28 +8,27 @@ import {ICONS} from '../../../../../constants/icons';
 
 interface Props {
   icon?: any;
-  switch?: boolean;
   name?: string;
-  default?: boolean;
   editable?: boolean;
+  showTiming?: boolean;
 }
 
 export const PaymentCard = (props: Props) => {
   return (
     <View style={styles.main}>
       <View style={styles.row1}>
-        <GreenCircle s41>{props.icon}</GreenCircle>
+        <GreenCircle s41>
+          <Image source={ICONS.broom} style={{height: 19.83, width: 13.88}} />
+        </GreenCircle>
         <Text style={styles.name}>{props.name ?? 'Card'}</Text>
       </View>
       <View style={styles.row1}>
-        {props.switch && <CustomSwitch />}
-        {props.editable && (
-          <Image
-            source={ICONS.pencil}
-            style={[styles.pencil, {marginLeft: 5}]}
-          />
+        {props.showTiming && (
+          <View style={styles.timeContainer}>
+            <Text style={styles.time}>24/h</Text>
+          </View>
         )}
-        {props.default && <Text style={styles.def}>{'Default'}</Text>}
+        <Image source={ICONS.pencil} style={[styles.pencil, {marginLeft: 5}]} />
       </View>
     </View>
   );
@@ -63,14 +62,22 @@ const styles = StyleSheet.create({
     color: COLORS.WF_TITLE,
     marginLeft: 10,
   },
-  def: {
+  time: {
     fontFamily: FONTS.P_REGULAR,
-    fontSize: 15,
-    color: COLORS.WF_TITLE,
-    opacity: 0.5,
+    fontSize: 12,
+    color: 'white',
   },
   pencil: {
     height: 15,
     width: 15,
+  },
+  timeContainer: {
+    width: 51,
+    height: 25,
+    borderRadius: 12.5,
+    backgroundColor: COLORS.MAIN_1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
   },
 });

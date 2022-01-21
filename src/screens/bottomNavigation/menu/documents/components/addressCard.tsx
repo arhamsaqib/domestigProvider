@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {GreenCircle} from '../../../../../components/greenCircle';
 import {COLORS} from '../../../../../constants/colors';
 import {FONTS} from '../../../../../constants/fonts';
@@ -10,11 +10,13 @@ export const AddressCard = () => {
     <View style={styles.main}>
       <View style={styles.row1}>
         <GreenCircle s41>
-          <Image source={ICONS.location} style={{height: 21, width: 21}} />
+          <Image source={ICONS.attachment} style={{height: 21, width: 18}} />
         </GreenCircle>
         <Text style={styles.name}>{'Home 1'}</Text>
       </View>
-      <Image source={ICONS.pencil} style={styles.pencil} />
+      <TouchableOpacity>
+        <Image source={ICONS.pencil} style={styles.pencil} />
+      </TouchableOpacity>
     </View>
   );
 };
