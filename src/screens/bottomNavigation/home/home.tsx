@@ -10,7 +10,7 @@ export const Home = () => {
   const [toggle, setToggle] = useState(false);
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
-      <View style={[GlobalStyles.row, GlobalStyles.subView]}>
+      <View style={[GlobalStyles.row, GlobalStyles.subView, {marginTop: 50}]}>
         <View style={[GlobalStyles.row, {width: '45%'}]}>
           <Avatar customSize size={50} />
           <View style={{height: '90%', alignSelf: 'center'}}>

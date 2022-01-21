@@ -10,6 +10,7 @@ import {DrawerOpener} from './components/drawerOpener';
 import {Drawer} from './components/drawer';
 import {HomeStack} from '../home/homeStack';
 import {NotificationsStack} from '../notifications/notificationsStack';
+import {HistoryStack} from '../history/historyStack';
 
 const BottomNav = createBottomTabNavigator();
 
@@ -68,7 +69,7 @@ const MainBottomNav = () => {
       />
       <BottomNav.Screen
         name="history"
-        component={SamplePage}
+        component={HistoryStack}
         options={{
           title: 'History',
           tabBarIcon: ({color, focused}: any) => (
