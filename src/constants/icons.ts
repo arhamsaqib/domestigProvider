@@ -24,6 +24,7 @@ const cash_coins = require('../assets/images/icons/cash_coins.png');
 const onboarding1 = require('../assets/images/onboarding/ob1.png');
 const onboarding2 = require('../assets/images/onboarding/ob2.png');
 const onboarding3 = require('../assets/images/onboarding/ob3.png');
+const earningbg = require('../assets/images/bg/earningbg.png');
 
 const ICONS = {
   upload,
@@ -52,6 +53,7 @@ const ICONS = {
   onboarding1,
   onboarding2,
   onboarding3,
+  earningbg,
 };
 
 export {ICONS};

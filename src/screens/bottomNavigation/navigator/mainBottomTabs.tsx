@@ -11,6 +11,7 @@ import {Drawer} from './components/drawer';
 import {HomeStack} from '../home/homeStack';
 import {NotificationsStack} from '../notifications/notificationsStack';
 import {HistoryStack} from '../history/historyStack';
+import {MenuStack} from '../menu/menuStack';
 
 const BottomNav = createBottomTabNavigator();
 
@@ -79,16 +80,16 @@ const MainBottomNav = () => {
       />
       <BottomNav.Screen
         name="menu"
-        //component={MenuStack}
-        component={() => {
-          return null;
-        }}
+        component={MenuStack}
+        // component={() => {
+        //   return null;
+        // }}
         options={{
           title: 'Menu',
           tabBarIcon: ({color, focused}: any) => (
             <Icon name="menu-outline" color={color} size={25} />
           ),
-          tabBarButton: (props: any) => <DrawerOpener />,
+          // tabBarButton: (props: any) => <DrawerOpener />,
         }}
       />
     </BottomNav.Navigator>

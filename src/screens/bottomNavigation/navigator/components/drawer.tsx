@@ -33,6 +33,11 @@ export const Drawer = ({navigation}: any) => {
       onPress: () => navigation.navigate('userAccount'),
     },
     {
+      name: 'Earnings',
+      iconName: 'wallet-outline',
+      onPress: () => navigation.navigate('earnings'),
+    },
+    {
       name: 'Addresses',
       iconName: 'location-outline',
       onPress: () => navigation.navigate('addresses'),
@@ -41,11 +46,6 @@ export const Drawer = ({navigation}: any) => {
       name: 'Payment',
       iconName: 'card-outline',
       onPress: () => navigation.navigate('payment'),
-    },
-    {
-      name: 'Wallet',
-      iconName: 'wallet-outline',
-      onPress: () => navigation.navigate('wallet'),
     },
     {
       name: 'Language',
