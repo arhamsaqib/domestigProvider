@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {COLORS} from '../constants/colors';
 
 export const GlobalStyles = StyleSheet.create({
   bottom: {
@@ -16,5 +17,10 @@ export const GlobalStyles = StyleSheet.create({
   },
   subView: {
     width: '90%',
+  },
+  screenMain: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: COLORS.WHITE,
   },
 });

@@ -9,8 +9,14 @@ import {GradientWrapper} from '../../helpers/gradientWrapper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../constants/colors';
 import {MyButton} from '../../components/button';
+import {GlobalStyles} from '../../common/styles';
+import {CheckBox} from '../../components/checkbox';
+import {MainBodyText} from '../../components/texts/mainBodyText';
 
 export const Login = ({navigation}: any) => {
+  async function onLogin() {
+    navigation.navigate('bottomNav');
+  }
   return (
     <GradientWrapper>
       <SafeAreaView style={styles.heading}>
@@ -26,6 +32,7 @@ export const Login = ({navigation}: any) => {
           <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
           <MyTextInputWithIcon
             placeholder="Enter your mail"
+            autoCapitalize="none"
             icon={
               <Icon
                 name="mail-outline"
@@ -49,8 +56,18 @@ export const Login = ({navigation}: any) => {
             }
           />
         </View>
+        <View
+          style={[GlobalStyles.subView, GlobalStyles.row, {marginBottom: 30}]}>
+          <View style={[GlobalStyles.row, {width: '40%'}]}>
+            <CheckBox />
+            <FieldNameText>Remember me</FieldNameText>
+          </View>
+          <MainBodyText style={{color: 'black'}} onPress={() => {}}>
+            Forgot password!
+          </MainBodyText>
+        </View>
         <View style={{width: '90%', marginBottom: 20}}>
-          <MyButton title="Login Now" />
+          <MyButton title="Login Now" onPress={onLogin} />
         </View>
       </BottomSheet>
     </GradientWrapper>
