@@ -9,6 +9,7 @@ import {Alert} from 'react-native';
 import {DrawerOpener} from './components/drawerOpener';
 import {Drawer} from './components/drawer';
 import {HomeStack} from '../home/homeStack';
+import {NotificationsStack} from '../notifications/notificationsStack';
 
 const BottomNav = createBottomTabNavigator();
 
@@ -57,7 +58,7 @@ const MainBottomNav = () => {
       />
       <BottomNav.Screen
         name="notification"
-        component={SamplePage}
+        component={NotificationsStack}
         options={{
           title: 'Notification',
           tabBarIcon: ({color, focused}: any) => (
