@@ -1,12 +1,15 @@
+import {NavigationContainer} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {FONTS} from '../../../../constants/fonts';
+import {MenuStack} from '../../menu/menuStack';
 import {Drawer} from './drawer';
 import {DrawerModal} from './drawerModal';
 
-export const DrawerOpener = (props: any) => {
+export const DrawerOpener = () => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
       <TouchableOpacity onPress={() => setIsOpen(!isOpen)} style={styles.main}>
@@ -17,6 +20,7 @@ export const DrawerOpener = (props: any) => {
         modalVisibility={isOpen}
         onOutsidePress={() => setIsOpen(false)}>
         <Drawer />
+        {/* <MenuStack /> */}
       </DrawerModal>
     </>
   );

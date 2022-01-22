@@ -1,7 +1,5 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {CommonStyles} from '../../../../common/styles';
-import {PageNameText} from '../../../../components/texts/pageNameText';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ProviderReviews} from './providerReviews';
 import {BottomCard} from '../../../../components/bottomCard';

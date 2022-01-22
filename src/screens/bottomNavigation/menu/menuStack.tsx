@@ -9,6 +9,7 @@ import {PrivacyPolicy} from './privacypolicy/policy';
 import {Earnings} from './earnings/earnings';
 import {Documents} from './documents/documents';
 import {Services} from './services/services';
+import {NavigationContainer} from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
