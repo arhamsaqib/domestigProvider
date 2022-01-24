@@ -18,7 +18,7 @@ export const CheckBox = (props: Props) => {
     <TouchableOpacity
       onPress={onStateSet}
       style={[styles.main, !state && styles.inactive, state && styles.active]}>
-      <Icon name="checkmark-outline" size={18} color={'white'} />
+      {state && <Icon name="checkmark-outline" size={18} color={'white'} />}
     </TouchableOpacity>
   );
 };
