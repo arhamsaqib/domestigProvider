@@ -46,7 +46,7 @@ export const Earnings = ({navigation}: any) => {
           <TransactionsCard />
         </View>
         <View style={styles.bottom}>
-          <MyButton title="Add balance" onPress={() => setShow(true)} />
+          <MyButton title="Withdraw balance" onPress={() => setShow(true)} />
         </View>
       </ScrollableView>
     </SafeAreaView>

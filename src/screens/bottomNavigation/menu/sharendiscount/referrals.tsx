@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {GlobalStyles} from '../../../../common/styles';
 import {BackIcon} from '../../../../components/backIcon';
 import {MyButton} from '../../../../components/button';
+import {Divider} from '../../../../components/divider';
 import {GreenCircle} from '../../../../components/greenCircle';
 import {MyTextInput} from '../../../../components/textinput';
 import {PageNameText} from '../../../../components/texts/pageNameText';
@@ -51,13 +52,14 @@ export const Referrals = ({navigation}: any) => {
           <MyButton style={{borderRadius: 5}} noIcon title="Copy link" />
         </View>
       </View>
-      <Text
-        style={[
-          styles.linkTxt,
-          {marginVertical: 10, width: '70%', textAlign: 'center'},
-        ]}>
-        or share with
-      </Text>
+      <View style={[GlobalStyles.row, GlobalStyles.subView]}>
+        <Divider style={{width: '30%', borderWidth: 0.5}} />
+        <Text
+          style={[styles.linkTxt, {marginVertical: 10, textAlign: 'center'}]}>
+          or share with
+        </Text>
+        <Divider style={{width: '30%', borderWidth: 0.5}} />
+      </View>
       <View style={styles.row}>
         <View style={{width: '19%'}}>
           <GreenCircle s50>
@@ -123,6 +125,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderWidth: 1,
     borderColor: COLORS.MAIN_1,
+    borderStyle: 'dashed',
   },
   linkTxt: {
     fontFamily: FONTS.P_REGULAR,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Divider} from '../../../../../components/divider';
 import {FONTS} from '../../../../../constants/fonts';
 import {ICONS} from '../../../../../constants/icons';

@@ -13,7 +13,9 @@ export const BalanceCard = (props: Props) => {
     <ImageBackground
       borderRadius={5}
       source={ICONS.earningbg}
-      resizeMode="stretch"
+      // height={85}
+      // width={160}
+      //resizeMode="center"
       style={styles.main}>
       <View
         style={{
