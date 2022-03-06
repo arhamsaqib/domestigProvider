@@ -12,6 +12,8 @@ import {
   getProviderIncomingRequests,
   rejectIncomingRequest,
   acceptIncomingRequest,
+  getProviderInProgress,
+  verifyBooking,
 } from '../../../api/incomingRequests';
 import {GlobalStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
@@ -23,6 +25,9 @@ import {FONTS} from '../../../constants/fonts';
 import {HistoryCard} from '../history/components/historyCard';
 import {ConfirmRejectRequest} from './components/confirmReject';
 import {IncomingRequest} from './components/incomingRequest';
+import {ProviderArrived} from './components/providerArrived';
+import {PhoneVerificationModel} from './components/verificationModel';
+import {WaitingProvider} from './components/waitingProvider';
 
 export const Home = () => {
   const [toggle, setToggle] = useState(false);
@@ -31,6 +36,12 @@ export const Home = () => {
   const [requests, setRequests]: any = useState([]);
   const [confirmReject, setConfirmReject]: any = useState(false);
   const [selectedRequest, setSelectedRequest]: any = useState([]);
+  const [waitingProvider, setWaitingProvider]: any = useState(false);
+  const [providerArrived, setProviderArrived]: any = useState(false);
+  const [verificationCode, setVerificationCode]: any = useState('');
+  const [phoneVerficationModal, setPhoneVerificationModal]: any =
+    useState(false);
+  const [inProgressBooking, setinProgressBooking]: any = useState([]);
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
   function renderIncoming({item}: any) {
     return (
@@ -52,6 +63,18 @@ export const Home = () => {
     if (res !== undefined) {
       setRequests(res);
     }
+    const res1 = await getProviderInProgress(state.id);
+    if (res1.id !== undefined) {
+      setinProgressBooking(res1);
+      if (res1.verified === 'true') {
+        setProviderArrived(true);
+
+        //console.log('res provider true');
+      } else {
+        setWaitingProvider(true);
+      }
+    }
+    console.log(res1, 'res1');
   }
   useEffect(() => {
     getData();
@@ -75,6 +98,18 @@ export const Home = () => {
     const res = await acceptIncomingRequest(data).finally(() => {
       getData();
     });
+  }
+  async function onCodeSubmit() {
+    if (inProgressBooking.verification_code === verificationCode) {
+      console.log('code matched');
+      const res = await verifyBooking(inProgressBooking.id);
+      setPhoneVerificationModal(false);
+      setProviderArrived(true);
+
+      getData();
+    } else {
+      console.log('code not matched');
+    }
   }
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
@@ -116,6 +151,24 @@ export const Home = () => {
         modalVisibility={confirmReject}
         onYesPress={onRejectPress}
         onNoPress={() => setConfirmReject(false)}
+      />
+      <WaitingProvider
+        modalVisibility={waitingProvider}
+        data={inProgressBooking}
+        onArrivedPress={() => {
+          setWaitingProvider(false);
+          setPhoneVerificationModal(true);
+        }}
+      />
+      <PhoneVerificationModel
+        modalVisibility={phoneVerficationModal}
+        setVerificationCode={setVerificationCode}
+        onSubmitPress={onCodeSubmit}
+      />
+      <ProviderArrived
+        modalVisibility={providerArrived}
+        providerId={state.id}
+        data={inProgressBooking}
       />
     </SafeAreaView>
   );

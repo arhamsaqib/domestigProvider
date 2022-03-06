@@ -21,3 +21,13 @@ export async function acceptIncomingRequest(data: {
   const res = await post(endpoint, data);
   return res;
 }
+export async function getProviderInProgress(id: string) {
+  var endpoint = 'provider-inprogress-booking';
+  const res = await get(endpoint + '/' + id);
+  return res;
+}
+export async function verifyBooking(bookingId: string) {
+  var endpoint = 'verify-booking';
+  const res = await get(endpoint + '/' + bookingId);
+  return res;
+}
