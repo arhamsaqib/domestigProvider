@@ -21,6 +21,7 @@ import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
 import {HistoryCard} from '../history/components/historyCard';
+import {ConfirmRejectRequest} from './components/confirmReject';
 import {IncomingRequest} from './components/incomingRequest';
 
 export const Home = () => {
@@ -28,6 +29,7 @@ export const Home = () => {
   const [loader, setLoader] = useState(false);
   const [incoming, setIncoming] = useState(false);
   const [requests, setRequests]: any = useState([]);
+  const [confirmReject, setConfirmReject]: any = useState(false);
   const [selectedRequest, setSelectedRequest]: any = useState([]);
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
   function renderIncoming({item}: any) {
@@ -103,8 +105,17 @@ export const Home = () => {
         modalVisibility={incoming}
         onOutisdePress={() => setIncoming(false)}
         data={selectedRequest}
-        onRejectPress={onRejectPress}
+        onRejectPress={() => {
+          setIncoming(false);
+          setConfirmReject(true);
+        }}
+        //onRejectPress={onRejectPress}
         onAcceptPress={onAcceptPress}
+      />
+      <ConfirmRejectRequest
+        modalVisibility={confirmReject}
+        onYesPress={onRejectPress}
+        onNoPress={() => setConfirmReject(false)}
       />
     </SafeAreaView>
   );
