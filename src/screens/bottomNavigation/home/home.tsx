@@ -8,7 +8,11 @@ import {
   View,
 } from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import {getProviderIncomingRequests} from '../../../api/incomingRequests';
+import {
+  getProviderIncomingRequests,
+  rejectIncomingRequest,
+  acceptIncomingRequest,
+} from '../../../api/incomingRequests';
 import {GlobalStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {BottomCard} from '../../../components/bottomCard';
@@ -50,6 +54,26 @@ export const Home = () => {
   useEffect(() => {
     getData();
   }, []);
+  async function onRejectPress() {
+    setIncoming(false);
+    const data = {
+      provider_id: state.id,
+      booking_id: selectedRequest.booking_id,
+    };
+    const res = await rejectIncomingRequest(data).finally(() => {
+      getData();
+    });
+  }
+  async function onAcceptPress() {
+    setIncoming(false);
+    const data = {
+      provider_id: state.id,
+      booking_id: selectedRequest.booking_id,
+    };
+    const res = await acceptIncomingRequest(data).finally(() => {
+      getData();
+    });
+  }
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
       <View style={[GlobalStyles.row, GlobalStyles.subView, {marginTop: 50}]}>
@@ -79,6 +103,8 @@ export const Home = () => {
         modalVisibility={incoming}
         onOutisdePress={() => setIncoming(false)}
         data={selectedRequest}
+        onRejectPress={onRejectPress}
+        onAcceptPress={onAcceptPress}
       />
     </SafeAreaView>
   );

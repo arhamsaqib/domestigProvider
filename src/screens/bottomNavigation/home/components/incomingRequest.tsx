@@ -14,6 +14,8 @@ interface Props {
   onOutisdePress?(): void;
   modalVisibility: boolean;
   data?: any;
+  onAcceptPress?(): void;
+  onRejectPress?(): void;
 }
 
 export const IncomingRequest = (props: Props) => {
@@ -74,10 +76,10 @@ export const IncomingRequest = (props: Props) => {
       </ScrollableView>
       <View style={styles.btnRow}>
         <View style={{width: '45%'}}>
-          <MyButton secondary title="Reject" />
+          <MyButton secondary title="Reject" onPress={props.onRejectPress} />
         </View>
         <View style={{width: '45%'}}>
-          <MyButton title="Accept" />
+          <MyButton title="Accept" onPress={props.onAcceptPress} />
         </View>
       </View>
     </BottomCard>
