@@ -87,7 +87,7 @@ export const Login = ({navigation}: any) => {
         <FieldNameText>
           Don't have an account?{' '}
           <FieldNameText
-            onPress={() => {}}
+            onPress={() => navigation.navigate('signup')}
             style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
             Sign up
           </FieldNameText>
