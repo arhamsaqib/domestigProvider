@@ -1,13 +1,55 @@
-import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {getProviderIncomingRequests} from '../../../api/incomingRequests';
 import {GlobalStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
+import {BottomCard} from '../../../components/bottomCard';
 import {CustomSwitch} from '../../../components/customSwitch';
+import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
+import {HistoryCard} from '../history/components/historyCard';
+import {IncomingRequest} from './components/incomingRequest';
 
 export const Home = () => {
   const [toggle, setToggle] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [incoming, setIncoming] = useState(false);
+  const [requests, setRequests]: any = useState([]);
+  const [selectedRequest, setSelectedRequest]: any = useState([]);
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
+  function renderIncoming({item}: any) {
+    return (
+      <HistoryCard
+        title={item.category_name + ' (' + item.bookingServices + ' )'}
+        status={item.bookingStatus}
+        onPress={() => {
+          setSelectedRequest(item);
+          setIncoming(true);
+        }}
+      />
+    );
+  }
+  async function getData() {
+    setLoader(true);
+    const res = await getProviderIncomingRequests(state.id).finally(() =>
+      setLoader(false),
+    );
+    if (res !== undefined) {
+      setRequests(res);
+    }
+  }
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
       <View style={[GlobalStyles.row, GlobalStyles.subView, {marginTop: 50}]}>
@@ -26,6 +68,18 @@ export const Home = () => {
           <CustomSwitch isOn={toggle} onToggle={() => setToggle(!toggle)} />
         </View>
       </View>
+      {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
+      <View style={[GlobalStyles.subView, {marginTop: 30}]}>
+        <PageNameText style={{marginBottom: 20}}>
+          Incoming Requests
+        </PageNameText>
+        <FlatList data={requests} renderItem={renderIncoming} />
+      </View>
+      <IncomingRequest
+        modalVisibility={incoming}
+        onOutisdePress={() => setIncoming(false)}
+        data={selectedRequest}
+      />
     </SafeAreaView>
   );
 };

@@ -30,7 +30,9 @@ export const Onboarding1 = ({navigation}: any) => {
       </View>
       <View style={[GlobalStyles.bottom5p, GlobalStyles.row, {width: '90%'}]}>
         <View style={{width: '30%', alignItems: 'center'}}>
-          <PageNameText onPress={() => {}}>Skip</PageNameText>
+          <PageNameText onPress={() => navigation.navigate('auth')}>
+            Skip
+          </PageNameText>
         </View>
         <View style={{width: '40%'}}>
           <MyButton title="Next" onPress={onNextPress} />
