@@ -8,18 +8,25 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import {Text} from 'react-native-svg';
 import {ICONS} from '../constants/icons';
 
 interface ModalView {
   modalVisibility: boolean;
   onOutsidePress?(): void;
   style?: StyleProp<ViewStyle>;
+  cardTopStyle?: StyleProp<ViewStyle>;
+  cardTopChildren?: any;
+  cardTop?: boolean;
 }
 
 export const BottomCard: FunctionComponent<ModalView> = ({
   children,
   modalVisibility,
   onOutsidePress,
+  cardTopChildren,
+  cardTop,
+  cardTopStyle,
   style,
 }) => {
   return (
@@ -31,6 +38,11 @@ export const BottomCard: FunctionComponent<ModalView> = ({
             width: '100%',
             height: '100%',
           }}></TouchableOpacity>
+        {cardTop && (
+          <View style={[{height: 100, width: '100%'}, cardTopStyle]}>
+            {cardTopChildren}
+          </View>
+        )}
         <View style={[styles.modalView2, style]}>
           <TouchableOpacity
             style={{

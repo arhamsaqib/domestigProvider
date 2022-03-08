@@ -9,9 +9,11 @@ interface Props {
 }
 
 export const GradientWrapper = (props: Props) => {
-  const {children} = props;
+  const {children, style} = props;
   return (
-    <LinearGradient colors={[COLORS.MAIN_1, COLORS.WHITE]} style={styles.main}>
+    <LinearGradient
+      colors={[COLORS.MAIN_1, COLORS.WHITE]}
+      style={[styles.main, props.style]}>
       {children}
       {/* <ScrollView style={[{width: '100%'}, props.style]}>
         <View style={{width: '100%', alignItems: 'center'}}>{children}</View>

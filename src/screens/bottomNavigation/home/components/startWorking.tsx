@@ -5,7 +5,7 @@ import {MainBodyText} from '../../../../components/texts/mainBodyText';
 import {COLORS} from '../../../../constants/colors';
 import {PageNameText} from '../../../../components/texts/pageNameText';
 import {GreenCircle} from '../../../../components/greenCircle';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {FONTS} from '../../../../constants/fonts';
 import {ScrollableView} from '../../../../helpers/scrollableView';
 import {MyButton} from '../../../../components/button';
@@ -13,16 +13,18 @@ import {ProfileOverview} from './profileOverview';
 import {getCustomerById} from '../../../../api/customer';
 import {getProviderById} from '../../../../api/provider';
 import {useSelector} from 'react-redux';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props {
   onOutisdePress?(): void;
   modalVisibility: boolean;
   data?: any;
-  onStartWorking?(): void;
+  onCompleteWork?(): void;
   providerId: string;
+  onMessagePress?(): void;
 }
 
-export const ProviderArrived = (props: Props) => {
+export const StartWorking = (props: Props) => {
   const [provider, setProvider]: any = useState([]);
   const [dt, setDt] = useState(new Date().toLocaleString());
   useEffect(() => {
@@ -44,11 +46,34 @@ export const ProviderArrived = (props: Props) => {
   }, []);
   return (
     <>
-      <View style={styles.timeCont}></View>
       <BottomCard
         style={{height: '30%', alignItems: 'center'}}
         modalVisibility={props.modalVisibility}
+        cardTop
+        cardTopChildren={
+          <TouchableOpacity
+            onPress={props.onMessagePress}
+            style={[styles.messageCont]}>
+            <Icon
+              name="chatbubble-ellipses-outline"
+              size={30}
+              color={COLORS.MAIN_1}
+            />
+          </TouchableOpacity>
+        }
+        cardTopStyle={{
+          width: '90%',
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+        }}
         onOutsidePress={props.onOutisdePress}>
+        {/* <TouchableOpacity style={[styles.messageCont, {marginTop: -200}]}>
+          <Icon
+            name="chatbubble-ellipses-outline"
+            size={30}
+            color={COLORS.MAIN_1}
+          />
+        </TouchableOpacity> */}
         <ScrollableView>
           <View style={{width: '90%'}}>
             <ProfileOverview name={provider.name} />
@@ -68,7 +93,7 @@ export const ProviderArrived = (props: Props) => {
             </Text>
           </View>
           <View style={{width: '90%'}}>
-            <MyButton title="Start Working" onPress={props.onStartWorking} />
+            <MyButton title="Complete Work" onPress={props.onCompleteWork} />
           </View>
         </ScrollableView>
       </BottomCard>
@@ -97,5 +122,12 @@ const styles = StyleSheet.create({
     //marginTop: 20,
     marginBottom: '10%',
   },
-  timeCont: {},
+  messageCont: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    backgroundColor: COLORS.WHITE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

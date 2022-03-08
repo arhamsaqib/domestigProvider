@@ -9,6 +9,10 @@ import {
 } from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {
+  createBookingSubmission,
+  showBookingSubmissionByPIDnBID,
+} from '../../../api/bookingSubmission';
+import {
   getProviderIncomingRequests,
   rejectIncomingRequest,
   acceptIncomingRequest,
@@ -23,38 +27,36 @@ import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
 import {HistoryCard} from '../history/components/historyCard';
+import {BeforeWorkImage} from './components/beforeWorkImage';
 import {ConfirmRejectRequest} from './components/confirmReject';
 import {IncomingRequest} from './components/incomingRequest';
 import {ProviderArrived} from './components/providerArrived';
+import {StartWorking} from './components/startWorking';
 import {PhoneVerificationModel} from './components/verificationModel';
 import {WaitingProvider} from './components/waitingProvider';
 
-export const Home = () => {
+export const Home = ({navigation}: any) => {
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
+
+  const [verificationCode, setVerificationCode]: any = useState('');
+  const [phoneVerficationModal, setPhoneVerificationModal] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [loader, setLoader] = useState(false);
   const [incoming, setIncoming] = useState(false);
-  const [requests, setRequests]: any = useState([]);
   const [confirmReject, setConfirmReject]: any = useState(false);
-  const [selectedRequest, setSelectedRequest]: any = useState([]);
   const [waitingProvider, setWaitingProvider]: any = useState(false);
   const [providerArrived, setProviderArrived]: any = useState(false);
-  const [verificationCode, setVerificationCode]: any = useState('');
-  const [phoneVerficationModal, setPhoneVerificationModal]: any =
-    useState(false);
+  const [startWorking, setStartWorking]: any = useState(false);
+  const [beforeModel, setBeforeModel] = useState(false);
   const [inProgressBooking, setinProgressBooking]: any = useState([]);
-  const state = useSelector((state: RootStateOrAny) => state.currentUser);
-  function renderIncoming({item}: any) {
-    return (
-      <HistoryCard
-        title={item.category_name + ' (' + item.bookingServices + ' )'}
-        status={item.bookingStatus}
-        onPress={() => {
-          setSelectedRequest(item);
-          setIncoming(true);
-        }}
-      />
-    );
-  }
+  const [requests, setRequests]: any = useState([]);
+  const [selectedRequest, setSelectedRequest]: any = useState([]);
+  const [submissionData, setSubmissionData]: any = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   async function getData() {
     setLoader(true);
     const res = await getProviderIncomingRequests(state.id).finally(() =>
@@ -68,17 +70,24 @@ export const Home = () => {
       setinProgressBooking(res1);
       if (res1.verified === 'true') {
         setProviderArrived(true);
-
-        //console.log('res provider true');
       } else {
         setWaitingProvider(true);
       }
     }
-    console.log(res1, 'res1');
+    const submission = await showBookingSubmissionByPIDnBID({
+      booking_id: res1.id,
+      provider_id: state.id,
+    });
+    console.log(submission, 'Submission data');
+    if (submission.id !== undefined) {
+      setSubmissionData(submission);
+      if (submission.before_work_image.length > 10) {
+        setProviderArrived(false);
+        setStartWorking(true);
+      }
+    }
   }
-  useEffect(() => {
-    getData();
-  }, []);
+
   async function onRejectPress() {
     setIncoming(false);
     const data = {
@@ -86,9 +95,11 @@ export const Home = () => {
       booking_id: selectedRequest.booking_id,
     };
     const res = await rejectIncomingRequest(data).finally(() => {
+      setConfirmReject(false);
       getData();
     });
   }
+
   async function onAcceptPress() {
     setIncoming(false);
     const data = {
@@ -99,6 +110,7 @@ export const Home = () => {
       getData();
     });
   }
+
   async function onCodeSubmit() {
     if (inProgressBooking.verification_code === verificationCode) {
       console.log('code matched');
@@ -110,6 +122,34 @@ export const Home = () => {
     } else {
       console.log('code not matched');
     }
+  }
+
+  function renderIncoming({item}: any) {
+    return (
+      <HistoryCard
+        title={item.category_name + ' (' + item.bookingServices + ' )'}
+        status={item.bookingStatus}
+        onPress={() => {
+          setSelectedRequest(item);
+          setIncoming(true);
+        }}
+      />
+    );
+  }
+  async function onBeforeImageSubmit(image: any) {
+    //console.log(image, 'Image data');
+    const data = {
+      provider_id: state.id,
+      booking_id: inProgressBooking.id,
+      //before_work_image: image.data,
+      before_work_image: image.sourceURL,
+    };
+    const res = await createBookingSubmission(data);
+    console.log(res);
+    // if (res.id !== undefined) {
+    setBeforeModel(false);
+    setStartWorking(true);
+    // }
   }
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
@@ -169,6 +209,23 @@ export const Home = () => {
         modalVisibility={providerArrived}
         providerId={state.id}
         data={inProgressBooking}
+        onStartWorking={() => {
+          setProviderArrived(false);
+          setBeforeModel(true);
+        }}
+      />
+      <BeforeWorkImage
+        modalVisibility={beforeModel}
+        onSubmitPress={onBeforeImageSubmit}
+      />
+      <StartWorking
+        modalVisibility={startWorking}
+        providerId={state.id}
+        data={inProgressBooking}
+        onMessagePress={() => {
+          setStartWorking(false);
+          navigation.navigate('chat');
+        }}
       />
     </SafeAreaView>
   );
