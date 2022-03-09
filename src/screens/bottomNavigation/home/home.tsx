@@ -12,6 +12,7 @@ import {
   createBookingSubmission,
   showBookingSubmissionByPIDnBID,
 } from '../../../api/bookingSubmission';
+import {getCustomerById} from '../../../api/customer';
 import {
   getProviderIncomingRequests,
   rejectIncomingRequest,
@@ -52,6 +53,7 @@ export const Home = ({navigation}: any) => {
   const [requests, setRequests]: any = useState([]);
   const [selectedRequest, setSelectedRequest]: any = useState([]);
   const [submissionData, setSubmissionData]: any = useState([]);
+  const [customer, setCustomer]: any = useState([]);
 
   useEffect(() => {
     getData();
@@ -72,6 +74,10 @@ export const Home = ({navigation}: any) => {
         setProviderArrived(true);
       } else {
         setWaitingProvider(true);
+      }
+      const cus = await getCustomerById(inProgressBooking.customer_id);
+      if (cus !== undefined) {
+        setCustomer(cus);
       }
     }
     const submission = await showBookingSubmissionByPIDnBID({
@@ -224,7 +230,12 @@ export const Home = ({navigation}: any) => {
         data={inProgressBooking}
         onMessagePress={() => {
           setStartWorking(false);
-          navigation.navigate('chat');
+          navigation.navigate('chat', {
+            booking_id: inProgressBooking.id,
+            customer_id: inProgressBooking.customer_id,
+            provider_id: state.id,
+            customer_details: customer,
+          });
         }}
       />
     </SafeAreaView>

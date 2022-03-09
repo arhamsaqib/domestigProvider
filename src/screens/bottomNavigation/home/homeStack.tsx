@@ -9,7 +9,6 @@ export const HomeStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="home" component={Home} />
-      <Stack.Screen name="chat" component={Chat} />
     </Stack.Navigator>
   );
 };

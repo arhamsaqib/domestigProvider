@@ -1,18 +1,27 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, TextInputProps, View} from 'react-native';
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {COLORS} from '../constants/colors';
 import {FONTS} from '../constants/fonts';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props extends TextInputProps {
   icon?: any;
+  mainContainerStyles?: StyleProp<ViewStyle>;
 }
 
 export const MyTextInputWithIcon = (props: Props) => {
   const [hideInput, setHideInput] = useState(false);
-  const {style, secureTextEntry, icon, ...rest} = props;
+  const {style, secureTextEntry, icon, mainContainerStyles, ...rest} = props;
   return (
-    <View style={styles.main}>
+    <View style={[styles.main, mainContainerStyles]}>
       <View style={styles.iconContainer}>{icon}</View>
       <TextInput
         style={[styles.ti, style]}
