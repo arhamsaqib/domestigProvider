@@ -60,11 +60,11 @@ export const Chat = ({route, navigation}: any) => {
       provider_id: pid,
       customer_id: cid,
     };
-    // const res = await receiveMessages(data).finally(() => setLoader(false));
-    // console.log(res);
-    // if (res !== undefined) {
-    //   setAllMessages(res);
-    // }
+    const res = await receiveMessages(data).finally(() => setLoader(false));
+    console.log(res);
+    if (res !== undefined) {
+      setAllMessages(res);
+    }
     flatListRef.current?.scrollToEnd({animated: true});
   }
   const flatListRef = React.useRef<FlatList>(null);

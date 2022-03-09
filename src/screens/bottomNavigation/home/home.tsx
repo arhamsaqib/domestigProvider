@@ -11,6 +11,7 @@ import {RootStateOrAny, useSelector} from 'react-redux';
 import {
   createBookingSubmission,
   showBookingSubmissionByPIDnBID,
+  updateBookingSubmission,
 } from '../../../api/bookingSubmission';
 import {getCustomerById} from '../../../api/customer';
 import {
@@ -54,6 +55,10 @@ export const Home = ({navigation}: any) => {
   const [selectedRequest, setSelectedRequest]: any = useState([]);
   const [submissionData, setSubmissionData]: any = useState([]);
   const [customer, setCustomer]: any = useState([]);
+  const [timeTaken, setTimeTaken]: any = useState();
+  const [timeStart, setTimeStart]: any = useState();
+
+  const [timer, setTimer] = useState(false);
 
   useEffect(() => {
     getData();
@@ -87,6 +92,17 @@ export const Home = ({navigation}: any) => {
     console.log(submission, 'Submission data');
     if (submission.id !== undefined) {
       setSubmissionData(submission);
+      var target = new Date('1970-01-01 ' + submission.time_taken);
+      console.log(submission.time_taken, 'time to start');
+
+      let regExTime: any = /([0-9]?[0-9]):([0-9][0-9]):([0-9][0-9])/;
+      let regExTimeArr = regExTime.exec(submission.time_taken);
+      let timeHr = regExTimeArr[1] * 3600 * 1000;
+      let timeMin = regExTimeArr[2] * 60 * 1000;
+      let timeSec = regExTimeArr[3] * 1000;
+
+      let timeMs = timeHr + timeMin + timeSec;
+      setTimeStart(timeMs);
       if (submission.before_work_image.length > 10) {
         setProviderArrived(false);
         setStartWorking(true);
@@ -149,14 +165,35 @@ export const Home = ({navigation}: any) => {
       booking_id: inProgressBooking.id,
       //before_work_image: image.data,
       before_work_image: image.sourceURL,
+      time_taken: '00:00:00',
     };
     const res = await createBookingSubmission(data);
     console.log(res);
+
     // if (res.id !== undefined) {
     setBeforeModel(false);
     setStartWorking(true);
+    setTimer(true);
     // }
   }
+  async function saveProgress(timerState: any) {
+    if (!timerState) {
+      console.log(timeTaken, 'Time takes');
+      const data = {
+        provider_id: state.id,
+        booking_id: inProgressBooking.id,
+        time_taken: timeTaken,
+      };
+      const res = await updateBookingSubmission(inProgressBooking.id, data);
+      console.log(res, 'Update time response');
+
+      // setStartWorking(true);
+    }
+    //console.log(image, 'Image data');
+
+    // }
+  }
+
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
       <View style={[GlobalStyles.row, GlobalStyles.subView, {marginTop: 50}]}>
@@ -228,6 +265,13 @@ export const Home = ({navigation}: any) => {
         modalVisibility={startWorking}
         providerId={state.id}
         data={inProgressBooking}
+        onToggleTimer={() => {
+          setTimer(!timer);
+          saveProgress(!timer);
+        }}
+        timer={timer}
+        getTime={setTimeTaken}
+        setTime={timeStart}
         onMessagePress={() => {
           setStartWorking(false);
           navigation.navigate('chat', {
