@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import {updateBooking} from '../../../api/bookings';
 import {
   createBookingSubmission,
   showBookingSubmissionByPIDnBID,
@@ -21,6 +22,7 @@ import {
   getProviderInProgress,
   verifyBooking,
 } from '../../../api/incomingRequests';
+import {generateInvoice} from '../../../api/invoice';
 import {GlobalStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {BottomCard} from '../../../components/bottomCard';
@@ -29,8 +31,10 @@ import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
 import {HistoryCard} from '../history/components/historyCard';
+import {AfterWorkImage} from './components/afterWorkImage';
 import {BeforeWorkImage} from './components/beforeWorkImage';
 import {ConfirmRejectRequest} from './components/confirmReject';
+import {ExtraCharge} from './components/extraCharge';
 import {IncomingRequest} from './components/incomingRequest';
 import {ProviderArrived} from './components/providerArrived';
 import {StartWorking} from './components/startWorking';
@@ -50,6 +54,7 @@ export const Home = ({navigation}: any) => {
   const [providerArrived, setProviderArrived]: any = useState(false);
   const [startWorking, setStartWorking]: any = useState(false);
   const [beforeModel, setBeforeModel] = useState(false);
+  const [afterModel, setAfterModel] = useState(false);
   const [inProgressBooking, setinProgressBooking]: any = useState([]);
   const [requests, setRequests]: any = useState([]);
   const [selectedRequest, setSelectedRequest]: any = useState([]);
@@ -57,6 +62,7 @@ export const Home = ({navigation}: any) => {
   const [customer, setCustomer]: any = useState([]);
   const [timeTaken, setTimeTaken]: any = useState();
   const [timeStart, setTimeStart]: any = useState();
+  const [extraWork, setExtraWork]: any = useState(false);
 
   const [timer, setTimer] = useState(false);
 
@@ -176,6 +182,25 @@ export const Home = ({navigation}: any) => {
     setTimer(true);
     // }
   }
+  async function onAfterImageSubmit(image: any) {
+    //console.log(image, 'Image data');
+    const data = {
+      provider_id: state.id,
+      booking_id: inProgressBooking.id,
+      //before_work_image: image.data,
+      after_work_image: image.sourceURL,
+      time_taken: timeTaken,
+    };
+    const res = await updateBookingSubmission(inProgressBooking.id, data);
+    console.log(res);
+
+    // if (res.id !== undefined) {
+    setAfterModel(false);
+    setExtraWork(true);
+    // setStartWorking(true);
+    // setTimer(true);
+    // }
+  }
   async function saveProgress(timerState: any) {
     if (!timerState) {
       console.log(timeTaken, 'Time takes');
@@ -192,6 +217,33 @@ export const Home = ({navigation}: any) => {
     //console.log(image, 'Image data');
 
     // }
+  }
+  async function onCompleteWork() {
+    saveProgress(false);
+    setStartWorking(false);
+    setAfterModel(true);
+  }
+  async function onSubmitExtraCharge(amount?: any, desc?: string) {
+    console.log(amount, desc);
+    const data = {
+      provider_id: state.id,
+      customer_id: inProgressBooking.customer_id,
+      booking_id: inProgressBooking.id,
+      extra_work: desc ?? 'none',
+      extra_work_charges: amount ?? 'none',
+      amount: '12',
+      total_amount: '12',
+    };
+    const res = await generateInvoice(data).finally(() => {
+      setExtraWork(false);
+    });
+    //console.log(res, 'Invoice');
+    const data1 = {
+      booking_id: inProgressBooking.id,
+      status: 'completed',
+    };
+    const res1 = await updateBooking(inProgressBooking.id, data1);
+    //console.log(res1, 'update');
   }
 
   return (
@@ -261,6 +313,14 @@ export const Home = ({navigation}: any) => {
         modalVisibility={beforeModel}
         onSubmitPress={onBeforeImageSubmit}
       />
+      <AfterWorkImage
+        modalVisibility={afterModel}
+        onSubmitPress={onAfterImageSubmit}
+      />
+      <ExtraCharge
+        modalVisibility={extraWork}
+        onSubmitNow={onSubmitExtraCharge}
+      />
       <StartWorking
         modalVisibility={startWorking}
         providerId={state.id}
@@ -272,6 +332,7 @@ export const Home = ({navigation}: any) => {
         timer={timer}
         getTime={setTimeTaken}
         setTime={timeStart}
+        onCompleteWork={onCompleteWork}
         onMessagePress={() => {
           setStartWorking(false);
           navigation.navigate('chat', {
