@@ -85,10 +85,10 @@ const MainBottomNav = () => {
       />
       <BottomNav.Screen
         name="menu"
-        // component={MenuStack}
-        component={() => {
-          return null;
-        }}
+        component={MenuStack}
+        // component={() => {
+        //   return null;
+        // }}
         options={{
           //title: 'Menu',
           tabBarIcon: ({color, focused}: any) => (
@@ -97,7 +97,7 @@ const MainBottomNav = () => {
           tabBarLabel: ({focused}) => {
             return <Label>{focused && 'Menu'}</Label>;
           },
-          tabBarButton: (props: any) => <DrawerOpener />,
+          // tabBarButton: () => <DrawerOpener />,
         }}
       />
     </BottomNav.Navigator>

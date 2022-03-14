@@ -10,6 +10,7 @@ import {Earnings} from './earnings/earnings';
 import {Documents} from './documents/documents';
 import {Services} from './services/services';
 import {NavigationContainer} from '@react-navigation/native';
+import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,3 +29,33 @@ export const MenuStack = () => {
     </Stack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  modalView1: {
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    //marginBottom: 20,
+  },
+
+  modalView2: {
+    backgroundColor: 'white',
+    width: '80%',
+    height: '100%',
+    borderRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  arrowDown: {
+    width: 40,
+    height: 6,
+  },
+  row: {
+    flexDirection: 'row',
+    height: '100%',
+  },
+});

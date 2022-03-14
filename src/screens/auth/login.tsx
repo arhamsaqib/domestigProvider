@@ -19,8 +19,8 @@ import {showProviderByFUID} from '../../api/provider';
 import auth from '@react-native-firebase/auth';
 
 export const Login = ({navigation}: any) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('johndoe@xyz.com');
+  const [password, setPassword] = useState('hahabisti123');
   const [loader, setLoader] = useState(false);
   const store = useStore();
   async function verifyLaravelUser(uid: any) {
@@ -88,6 +88,7 @@ export const Login = ({navigation}: any) => {
               placeholder="Enter your mail"
               autoCapitalize="none"
               onChangeText={setEmail}
+              value={email}
               icon={
                 <Icon
                   name="mail-outline"

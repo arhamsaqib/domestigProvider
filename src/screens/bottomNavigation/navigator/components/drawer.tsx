@@ -9,8 +9,10 @@ import {ICONS} from '../../../../constants/icons';
 import {DrawerOption} from './drawerOption';
 import {ScrollableView} from '../../../../helpers/scrollableView';
 import {GlobalStyles} from '../../../../common/styles';
+import {useNavigation} from '@react-navigation/native';
 
 export const Drawer = ({navigation}: any) => {
+  //const navigation = useNavigation();
   const options = [
     {
       name: 'Home',

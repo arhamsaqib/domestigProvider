@@ -9,15 +9,15 @@ import {GradientWrapper} from '../../helpers/gradientWrapper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../constants/colors';
 import {MyButton} from '../../components/button';
-import {CheckBox} from '../../components/checkbox';
-import {MainBodyText} from '../../components/texts/mainBodyText';
-import {Divider} from '../../components/divider';
 import {ScrollableView} from '../../helpers/scrollableView';
 import {CheckSameString} from '../../helpers/checkSameString';
 import auth from '@react-native-firebase/auth';
 import {createProvider} from '../../api/provider';
 import updateCurrentUserAction from '../../redux/action/currectUserAction';
 import {useStore} from 'react-redux';
+import {MultipleOptions} from '../../components/multipleOptions';
+import {placeAutocomplete} from '../../api/places';
+import {CountriesOptions} from '../../components/countriesOptions';
 
 export const Signup = ({navigation}: any) => {
   const [name, setName]: any = useState('');
@@ -29,6 +29,9 @@ export const Signup = ({navigation}: any) => {
   const [error, setError]: any = useState('');
   const [loader, setLoader] = useState(false);
   const [confirmPassword, setConfirmPassword]: any = useState('');
+  const [place, setPlace]: any = useState('');
+  const [showPlaces, setShowPlaces] = useState(false);
+  const [showCountries, setShowCountries] = useState(false);
   const store = useStore();
 
   function disabled() {
@@ -96,6 +99,16 @@ export const Signup = ({navigation}: any) => {
       setLoader(false);
       setError('Passwords do not match');
     }
+  }
+  async function findLocation(str: string) {
+    const res = await placeAutocomplete(str);
+    setPlace(res);
+    console.log(res);
+  }
+  function onSelect(item: any) {
+    console.log(item, 'Selected Item');
+    setLocation(item.description);
+    setShowPlaces(false);
   }
   return (
     <>
@@ -193,6 +206,8 @@ export const Signup = ({navigation}: any) => {
               <MyTextInputWithIcon
                 placeholder="Select your country"
                 onChangeText={setCountry}
+                defaultValue={country}
+                onFocus={() => setShowCountries(true)}
                 autoCapitalize="none"
                 icon={
                   <Icon
@@ -202,12 +217,23 @@ export const Signup = ({navigation}: any) => {
                   />
                 }
               />
+              {showCountries && (
+                <CountriesOptions
+                  onSelect={(item: any) => {
+                    setCountry(item.name);
+                    setShowCountries(false);
+                  }}
+                  find={country}
+                />
+              )}
             </View>
             <View style={{width: '90%', marginBottom: 20}}>
               <FieldNameText style={{marginBottom: 5}}>Location</FieldNameText>
               <MyTextInputWithIcon
+                onFocus={() => setShowPlaces(true)}
                 placeholder="Enter your location"
-                onChangeText={setLocation}
+                defaultValue={location}
+                onChangeText={findLocation}
                 icon={
                   <Icon
                     name="location-outline"
@@ -216,6 +242,9 @@ export const Signup = ({navigation}: any) => {
                   />
                 }
               />
+              {showPlaces && (
+                <MultipleOptions data={place.predictions} onSelect={onSelect} />
+              )}
             </View>
 
             <View style={{width: '90%', marginBottom: 300}}>
