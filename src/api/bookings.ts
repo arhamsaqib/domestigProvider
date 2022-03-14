@@ -21,3 +21,8 @@ export async function updateBooking(
   const res = await put(endpoint + '/' + bookingId, data);
   return res;
 }
+export async function getProviderAllBookings(providerId: string) {
+  const endp = 'show-provider-bookings';
+  const res = await get(endp + '/' + providerId);
+  return res;
+}
