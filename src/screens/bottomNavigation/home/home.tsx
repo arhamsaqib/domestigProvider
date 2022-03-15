@@ -23,6 +23,7 @@ import {
   verifyBooking,
 } from '../../../api/incomingRequests';
 import {generateInvoice} from '../../../api/invoice';
+import {getProviderById, updateProvider} from '../../../api/provider';
 import {GlobalStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {BottomCard} from '../../../components/bottomCard';
@@ -60,6 +61,7 @@ export const Home = ({navigation}: any) => {
   const [selectedRequest, setSelectedRequest]: any = useState([]);
   const [submissionData, setSubmissionData]: any = useState([]);
   const [customer, setCustomer]: any = useState([]);
+  const [provider, setProvider]: any = useState([]);
   const [timeTaken, setTimeTaken]: any = useState();
   const [timeStart, setTimeStart]: any = useState();
   const [extraWork, setExtraWork]: any = useState(false);
@@ -72,6 +74,17 @@ export const Home = ({navigation}: any) => {
 
   async function getData() {
     setLoader(true);
+
+    const prov = await getProviderById(state.id);
+    if (prov !== undefined) {
+      setProvider(prov);
+    }
+    if (prov.working_status === 'active') {
+      setToggle(true);
+    } else {
+      setToggle(false);
+    }
+
     const res = await getProviderIncomingRequests(state.id).finally(() =>
       setLoader(false),
     );
@@ -245,6 +258,17 @@ export const Home = ({navigation}: any) => {
     const res1 = await updateBooking(inProgressBooking.id, data1);
     //console.log(res1, 'update');
   }
+  async function onToggleStatus(status: boolean) {
+    setToggle(status);
+    var ws = 'inactive';
+    if (status) {
+      ws = 'active';
+    }
+    const data = {
+      working_status: ws,
+    };
+    const tg = await updateProvider(state.id, data);
+  }
 
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
@@ -261,7 +285,10 @@ export const Home = ({navigation}: any) => {
             {toggle && 'Online'}
             {!toggle && 'Offline'}
           </Text>
-          <CustomSwitch isOn={toggle} onToggle={() => setToggle(!toggle)} />
+          <CustomSwitch
+            isOn={toggle}
+            onToggle={() => onToggleStatus(!toggle)}
+          />
         </View>
       </View>
       {loader && <ActivityIndicator color={COLORS.MAIN_1} />}

@@ -8,7 +8,7 @@ interface Props {
   item?: any;
 }
 
-export const Review = (props: Props) => {
+export const ProviderReview = (props: Props) => {
   var desc =
     'Lorem Ipsum is simply dummy text of the printing and typesetting industry. galley of type and scrambled it to make a type specimen book.';
   return (
@@ -17,12 +17,8 @@ export const Review = (props: Props) => {
         <Avatar customSize size={41} />
       </View>
       <View style={styles.col}>
-        <Text style={[styles.name, {marginBottom: 5}]}>
-          {props.item.provider_name}
-        </Text>
-        <Text style={[styles.desc, {marginBottom: 5}]}>
-          {props.item.review ?? desc}
-        </Text>
+        <Text style={[styles.name, {marginBottom: 5}]}>{'hi'}</Text>
+        <Text style={[styles.desc, {marginBottom: 5}]}>{desc}</Text>
         <Text style={[styles.time, {marginBottom: 5}]}>2 hours ago</Text>
       </View>
     </View>

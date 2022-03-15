@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {showBookingSubmissionByPIDnBID} from '../../../api/bookingSubmission';
 import {getCustomerById} from '../../../api/customer';
+import {viewInvoiceByBookingId} from '../../../api/invoice';
+import {saveCustomerReview} from '../../../api/rating';
 import {GlobalStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {BackIcon} from '../../../components/backIcon';
@@ -12,22 +15,51 @@ import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
 import {ICONS} from '../../../constants/icons';
 import {ScrollableView} from '../../../helpers/scrollableView';
+import {GiveReview} from '../home/components/giveReview';
 import {ProviderDetails} from './provider/providerDetails';
 
 export const HistoryDetails = ({navigation, route}: any) => {
   const [card, setCard] = useState(false);
   const details = route.params.details;
   const [laoder, setLoader] = useState(false);
-  const [provider, setProvider]: any = useState([]);
+  const [ratingModal, setRatingModal] = useState(false);
+  const [customer, setCustomer]: any = useState([]);
+  const [submission, setSubmission]: any = useState([]);
+  const [invoice, setInvoice]: any = useState([]);
+
   async function getData() {
     setLoader(true);
     const res = await getCustomerById(details.customer_id).finally(() =>
       setLoader(false),
     );
+    const sub = await showBookingSubmissionByPIDnBID({
+      booking_id: details.id,
+      provider_id: details.provider_id,
+    });
+    const inv = await viewInvoiceByBookingId(details.id);
     if (res !== undefined) {
-      setProvider(res);
+      setCustomer(res);
     }
-    console.log(res, 'provider');
+    if (sub !== undefined) {
+      setSubmission(sub);
+    }
+    if (inv !== undefined) {
+      setInvoice(inv);
+    }
+    //console.log(res, 'provider');
+  }
+  async function onRatingSubmit(rating: string, stars: any) {
+    const data = {
+      booking_id: details.id,
+      provider_id: details.provider_id,
+      customer_id: details.customer_id,
+      review: rating,
+      stars: stars,
+    };
+    const res = await saveCustomerReview(data).finally(() => {
+      setRatingModal(false);
+    });
+    console.log(res, 'Review');
   }
   useEffect(() => {
     getData();
@@ -37,6 +69,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
       <ProviderDetails
         modalVisibility={card}
         onOutsidePress={() => setCard(false)}
+        data={customer}
       />
       <ScrollableView>
         <View style={styles.topRow}>
@@ -84,7 +117,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
         </View>
         <View style={{width: '90%', marginVertical: 10}}>
           <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>
-          <Text style={[styles.value]}>Lorem Ipsum is simply dummy text</Text>
+          <Text style={[styles.value]}>{customer.location}</Text>
         </View>
         <View style={{width: '90%', marginVertical: 10}}>
           <Text style={styles.head}>Client details</Text>
@@ -97,7 +130,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
               onPress={() => setCard(true)}
               pressable
             />
-            <Text style={[styles.name, {marginLeft: 5}]}>{provider.name}</Text>
+            <Text style={[styles.name, {marginLeft: 5}]}>{customer.name}</Text>
           </View>
           {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.valueBold}>24</Text>
@@ -173,7 +206,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
           <Text style={[styles.field, {marginBottom: 5}]}>
             Total Serving Time
           </Text>
-          <Text style={[styles.value]}>2 hours 20 minutes</Text>
+          <Text style={[styles.value]}>{submission.time_taken}</Text>
         </View>
         <View
           style={{
@@ -184,7 +217,9 @@ export const HistoryDetails = ({navigation, route}: any) => {
             marginBottom: 10,
           }}>
           <Text style={[styles.name, {fontSize: 13}]}>Total Amount</Text>
-          <Text style={[styles.name, {fontSize: 13}]}>$52</Text>
+          <Text style={[styles.name, {fontSize: 13}]}>
+            ${invoice.total_amount}
+          </Text>
         </View>
         <View
           style={{
@@ -194,8 +229,16 @@ export const HistoryDetails = ({navigation, route}: any) => {
             justifyContent: 'space-between',
           }}>
           <Text style={[styles.name, {fontSize: 13}]}>Extra work charge</Text>
-          <Text style={[styles.name, {fontSize: 13}]}>$10</Text>
+          <Text style={[styles.name, {fontSize: 13}]}>
+            ${invoice.extra_work_charges}
+          </Text>
         </View>
+        <GiveReview
+          modalVisibility={ratingModal}
+          onOutisdePress={() => setRatingModal(false)}
+          customerData={customer}
+          onSubmitPress={onRatingSubmit}
+        />
         <View
           style={{
             width: '90%',
@@ -205,10 +248,10 @@ export const HistoryDetails = ({navigation, route}: any) => {
             marginBottom: 10,
           }}>
           <Text style={[styles.name, {fontSize: 13}]}>Amount</Text>
-          <Text style={[styles.name, {fontSize: 13}]}>$60</Text>
+          <Text style={[styles.name, {fontSize: 13}]}>${invoice.amount}</Text>
         </View>
         <View style={{width: '90%', marginVertical: 20}}>
-          <MyButton title="Leave Review" />
+          <MyButton title="Leave Review" onPress={() => setRatingModal(true)} />
         </View>
       </ScrollableView>
     </SafeAreaView>

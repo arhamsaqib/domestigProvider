@@ -16,3 +16,7 @@ export async function generateInvoice(data: GenerateInvoice) {
   const res = await post(endpoint, data);
   return res;
 }
+export async function viewInvoiceByBookingId(id: string) {
+  const res = await get(endpoint + '/' + id);
+  return res;
+}

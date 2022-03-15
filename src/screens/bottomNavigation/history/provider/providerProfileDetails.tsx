@@ -5,7 +5,9 @@ import {COLORS} from '../../../../constants/colors';
 import {FONTS} from '../../../../constants/fonts';
 import {ScrollableView} from '../../../../helpers/scrollableView';
 
-export const ProviderProfileDetails = () => {
+export const ProviderProfileDetails = ({route}: any) => {
+  // console.log(route.params, 'Params');
+  const user = route.params.user;
   var desc =
     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
   return (
@@ -13,19 +15,19 @@ export const ProviderProfileDetails = () => {
       <ScrollableView>
         <View style={styles.container}>
           <Text style={[styles.field, {marginBottom: 5}]}>Email</Text>
-          <Text style={styles.val}>abc@xyz.com</Text>
+          <Text style={styles.val}>{user.email}</Text>
         </View>
         <View style={styles.container}>
           <Text style={[styles.field, {marginBottom: 5}]}>Phone</Text>
-          <Text style={styles.val}>+123456789</Text>
+          <Text style={styles.val}>{user.phone}</Text>
         </View>
         <View style={styles.container}>
           <Text style={[styles.field, {marginBottom: 5}]}>Country</Text>
-          <Text style={styles.val}>Pakistan</Text>
+          <Text style={styles.val}>{user.country}</Text>
         </View>
         <View style={styles.container}>
           <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>
-          <Text style={styles.val}>Lahore</Text>
+          <Text style={styles.val}>{user.location}</Text>
         </View>
       </ScrollableView>
     </View>

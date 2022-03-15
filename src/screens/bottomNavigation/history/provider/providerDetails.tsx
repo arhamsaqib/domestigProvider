@@ -14,6 +14,7 @@ const TobTabs = createMaterialTopTabNavigator();
 interface Props {
   modalVisibility: boolean;
   onOutsidePress?(): void;
+  data?: any;
 }
 
 export const ProviderDetails = (props: Props) => {
@@ -24,7 +25,9 @@ export const ProviderDetails = (props: Props) => {
       modalVisibility={props.modalVisibility}>
       <View style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
         <Avatar customSize size={80} verified />
-        <Text style={[styles.name, {marginVertical: 3}]}>Arham Saqib</Text>
+        <Text style={[styles.name, {marginVertical: 3}]}>
+          {props.data.name}
+        </Text>
         <View
           style={{
             flexDirection: 'row',
@@ -48,11 +51,13 @@ export const ProviderDetails = (props: Props) => {
           name="providerDetails"
           component={ProviderProfileDetails}
           options={{title: 'Profile Details'}}
+          initialParams={{user: props.data}}
         />
         <TobTabs.Screen
           name="providerReviews"
           component={ProviderReviews}
           options={{title: 'Reviews'}}
+          initialParams={{user: props.data}}
         />
       </TobTabs.Navigator>
     </BottomCard>

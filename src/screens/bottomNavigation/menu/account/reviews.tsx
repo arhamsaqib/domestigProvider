@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Review} from '../../history/provider/components/review';
 import {ScrollableView} from '../../../../helpers/scrollableView';
 import {GlobalStyles} from '../../../../common/styles';
+import {ProviderReview} from './components/providerReview';
 
 export const Reviews = () => {
   return (
@@ -16,10 +17,7 @@ export const Reviews = () => {
       </View>
       <ScrollableView>
         <View style={{width: '90%', marginTop: 10}}>
-          <Review />
-          <Review />
-          <Review />
-          <Review />
+          <ProviderReview />
         </View>
       </ScrollableView>
     </View>

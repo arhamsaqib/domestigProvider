@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Image, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native';
 import {Avatar} from '../../../../components/avatar';
@@ -10,6 +10,8 @@ import {DrawerOption} from './drawerOption';
 import {ScrollableView} from '../../../../helpers/scrollableView';
 import {GlobalStyles} from '../../../../common/styles';
 import {useNavigation} from '@react-navigation/native';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {getProviderById} from '../../../../api/provider';
 
 export const Drawer = ({navigation}: any) => {
   //const navigation = useNavigation();
@@ -81,10 +83,22 @@ export const Drawer = ({navigation}: any) => {
     );
   };
 
+  const [user, setUser]: any = useState([]);
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
+  async function getData() {
+    const res = await getProviderById(state.id);
+    if (res !== undefined) {
+      setUser(res);
+    }
+  }
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
       <Avatar customSize size={70} />
-      <Text style={[styles.name, {marginVertical: 10}]}>Arham Saqib</Text>
+      <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
       <View style={styles.ratingCont}>
         <Image
           style={[styles.rating, {marginRight: 5}]}
