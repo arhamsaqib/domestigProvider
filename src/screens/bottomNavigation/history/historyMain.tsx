@@ -17,6 +17,7 @@ import {HistoryCard} from './components/historyCard';
 
 export const HistoryMain = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
+  const [filter, setFilter] = useState('in-progress');
   const [bookings, setBookings]: any = useState([]);
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
   async function GetData() {
@@ -33,11 +34,18 @@ export const HistoryMain = ({navigation}: any) => {
   }, []);
   const renderHistory = ({item}: any) => {
     return (
-      <HistoryCard
-        status={item.status}
-        title={item.category_name + '(' + item.services + ')'}
-        onPress={() => navigation.navigate('historyDetails', {details: item})}
-      />
+      <>
+        {(filter === item.status ||
+          (filter === 'in-progress' && item.status === 'pending')) && (
+          <HistoryCard
+            status={item.status}
+            title={item.category_name + '(' + item.services + ')'}
+            onPress={() =>
+              navigation.navigate('historyDetails', {details: item})
+            }
+          />
+        )}
+      </>
     );
   };
   return (
@@ -47,13 +55,25 @@ export const HistoryMain = ({navigation}: any) => {
       </View>
       <View style={styles.filterCont}>
         <View style={{width: '30%'}}>
-          <ToggleButton name="Current" activeByDefault />
+          <ToggleButton
+            name="Current"
+            onPress={() => setFilter('in-progress')}
+            active={filter === 'in-progress' && true}
+          />
         </View>
         <View style={{width: '30%'}}>
-          <ToggleButton name="Past" />
+          <ToggleButton
+            name="Past"
+            onPress={() => setFilter('completed')}
+            active={filter === 'completed' && true}
+          />
         </View>
         <View style={{width: '30%'}}>
-          <ToggleButton name="Up-coming" />
+          <ToggleButton
+            name="Up-coming"
+            onPress={() => setFilter('upcoming')}
+            active={filter === 'upcoming' && true}
+          />
         </View>
       </View>
       <View style={{width: '90%', marginVertical: 10}}>
@@ -63,6 +83,7 @@ export const HistoryMain = ({navigation}: any) => {
           refreshControl={
             <RefreshControl onRefresh={GetData} refreshing={false} />
           }
+          inverted
           renderItem={renderHistory}
           data={bookings}
         />

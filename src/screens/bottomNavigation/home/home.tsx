@@ -49,6 +49,7 @@ import {
   generateAfterWorkImageSubmitNotification,
   generatePauseBookingNotification,
 } from '../../../helpers/generateNotification';
+import {FieldNameText} from '../../../components/texts/fieldNameText';
 
 export const Home = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -430,6 +431,11 @@ export const Home = ({navigation}: any) => {
           Incoming Requests
         </PageNameText>
         <FlatList data={requests} renderItem={renderIncoming} />
+        {requests.length < 1 && (
+          <FieldNameText style={{alignSelf: 'center'}}>
+            No new requests
+          </FieldNameText>
+        )}
       </View>
       <IncomingRequest
         modalVisibility={incoming}

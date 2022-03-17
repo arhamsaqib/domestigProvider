@@ -6,13 +6,17 @@ import {COLORS} from '../constants/colors';
 interface Props {
   circle?: boolean;
   tick?: boolean;
+  onPress?(state: boolean): void;
 }
 
 export const CheckMark = (props: Props) => {
   const [active, setActive] = useState(false);
   return (
     <TouchableOpacity
-      onPress={() => setActive(!active)}
+      onPress={() => {
+        setActive(!active);
+        props.onPress && props.onPress(!active);
+      }}
       style={[styles.main, active && styles.active]}>
       {props.tick && (
         <Icon

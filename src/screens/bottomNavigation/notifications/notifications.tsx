@@ -20,7 +20,7 @@ export const Notification = () => {
   }
 
   function renderNotifications({item}: any) {
-    return <NotificationCard title={item.description} />;
+    return <NotificationCard title={item.description} date={item.created_at} />;
   }
 
   useEffect(() => {

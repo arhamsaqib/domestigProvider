@@ -4,14 +4,18 @@ import {GreenCircle} from '../../../../components/greenCircle';
 import {COLORS} from '../../../../constants/colors';
 import {FONTS} from '../../../../constants/fonts';
 import Icon from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
 
 interface Props {
   read?: boolean;
   title?: string;
   time?: string;
+  date?: any;
 }
 
 export const NotificationCard = (props: Props) => {
+  const dt = new Date(props.date);
+
   return (
     <TouchableOpacity
       style={[styles.main, (props.read && styles.read) ?? styles.unread]}>
@@ -24,7 +28,11 @@ export const NotificationCard = (props: Props) => {
             'Lorem Ipsum is simply dummy of text of the of and industry.'}
         </Text>
         <Text style={[styles.desc, {marginTop: 5}]}>
-          {props.time ?? '2'} hours ago
+          {moment
+            .utc(dt.toLocaleDateString())
+            .local()
+            .startOf('seconds')
+            .fromNow()}
         </Text>
       </View>
       <View
@@ -33,7 +41,11 @@ export const NotificationCard = (props: Props) => {
           alignItems: 'flex-end',
           justifyContent: 'center',
         }}>
-        <Icon onPress={() => {}} name="ellipsis-vertical-outline" size={20} />
+        <Icon
+          onPress={() => console.log()}
+          name="ellipsis-vertical-outline"
+          size={20}
+        />
       </View>
     </TouchableOpacity>
   );
