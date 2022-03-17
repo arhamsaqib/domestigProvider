@@ -89,6 +89,12 @@ export const Notification = () => {
           Mark all as read
         </Text>
       </View>
+      {notifications.length < 1 && (
+        <FieldNameText style={{marginTop: 20}}>
+          No new notifications
+        </FieldNameText>
+      )}
+
       <View style={{marginTop: 10, width: '100%'}}>
         <FlatList data={notifications} renderItem={renderNotifications} />
       </View>

@@ -51,6 +51,7 @@ import {
   generatePauseBookingNotification,
 } from '../../../helpers/generateNotification';
 import {FieldNameText} from '../../../components/texts/fieldNameText';
+import {generateGreetings} from '../../../helpers/greetings';
 
 export const Home = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -412,8 +413,8 @@ export const Home = ({navigation}: any) => {
         <View style={[GlobalStyles.row, {width: '45%'}]}>
           <Avatar customSize size={50} />
           <View style={{height: '90%', alignSelf: 'center'}}>
-            <Text style={styles.gm}>Good Morning</Text>
-            <Text style={styles.name}>Arham S.</Text>
+            <Text style={styles.gm}>{generateGreetings()}</Text>
+            <Text style={styles.name}>{provider.name}</Text>
           </View>
         </View>
         <View style={[GlobalStyles.row, {width: '30%'}]}>
