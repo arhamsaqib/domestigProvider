@@ -15,6 +15,7 @@ import {
   updateBookingSubmission,
 } from '../../../api/bookingSubmission';
 import {getCustomerById} from '../../../api/customer';
+import {generateCustomerNotification} from '../../../api/customerNotifications';
 import {
   getProviderIncomingRequests,
   rejectIncomingRequest,
@@ -24,9 +25,9 @@ import {
 } from '../../../api/incomingRequests';
 import {generateInvoice} from '../../../api/invoice';
 import {getProviderById, updateProvider} from '../../../api/provider';
+import {generateProviderNotification} from '../../../api/providerNotifications';
 import {GlobalStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
-import {BottomCard} from '../../../components/bottomCard';
 import {CustomSwitch} from '../../../components/customSwitch';
 import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
@@ -41,6 +42,13 @@ import {ProviderArrived} from './components/providerArrived';
 import {StartWorking} from './components/startWorking';
 import {PhoneVerificationModel} from './components/verificationModel';
 import {WaitingProvider} from './components/waitingProvider';
+import {
+  generateAcceptRequestNotification,
+  generateOnCodeSubmitNotification,
+  generateBeforeWorkImageSubmitNotification,
+  generateAfterWorkImageSubmitNotification,
+  generatePauseBookingNotification,
+} from '../../../helpers/generateNotification';
 
 export const Home = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -108,7 +116,7 @@ export const Home = ({navigation}: any) => {
       booking_id: res1.id,
       provider_id: state.id,
     });
-    console.log(submission, 'Submission data');
+    //console.log(submission, 'Submission data');
     if (submission.id !== undefined) {
       setSubmissionData(submission);
       var target = new Date('1970-01-01 ' + submission.time_taken);
@@ -130,6 +138,7 @@ export const Home = ({navigation}: any) => {
   }
 
   async function onRejectPress() {
+    console.log(selectedRequest, 'selected');
     setIncoming(false);
     const data = {
       provider_id: state.id,
@@ -150,6 +159,27 @@ export const Home = ({navigation}: any) => {
     const res = await acceptIncomingRequest(data).finally(() => {
       getData();
     });
+    const notifications = generateAcceptRequestNotification({
+      category_name: selectedRequest.category_name,
+      services: selectedRequest.bookingServices,
+      provider_name: provider.name,
+    });
+    const n1data = {
+      provider_id: state.id,
+      customer_id: selectedRequest.customer_id,
+      booking_id: selectedRequest.booking_id,
+      description: notifications.customer,
+      status: 'unread',
+    };
+    const n2data = {
+      provider_id: state.id,
+      customer_id: selectedRequest.customer_id,
+      booking_id: selectedRequest.booking_id,
+      description: notifications.provider,
+      status: 'unread',
+    };
+    await generateCustomerNotification(n1data);
+    await generateProviderNotification(n2data);
   }
 
   async function onCodeSubmit() {
@@ -158,6 +188,28 @@ export const Home = ({navigation}: any) => {
       const res = await verifyBooking(inProgressBooking.id);
       setPhoneVerificationModal(false);
       setProviderArrived(true);
+
+      const notifications = generateOnCodeSubmitNotification({
+        provider_name: provider.name,
+        category_name: inProgressBooking.category_name,
+        services: inProgressBooking.services,
+      });
+      const n1data = {
+        provider_id: state.id,
+        customer_id: selectedRequest.customer_id,
+        booking_id: selectedRequest.booking_id,
+        description: notifications.customer,
+        status: 'unread',
+      };
+      const n2data = {
+        provider_id: state.id,
+        customer_id: selectedRequest.customer_id,
+        booking_id: selectedRequest.booking_id,
+        description: notifications.provider,
+        status: 'unread',
+      };
+      const n1 = await generateCustomerNotification(n1data);
+      const n2 = await generateProviderNotification(n2data);
 
       getData();
     } else {
@@ -188,7 +240,27 @@ export const Home = ({navigation}: any) => {
     };
     const res = await createBookingSubmission(data);
     console.log(res);
-
+    const notifications = generateBeforeWorkImageSubmitNotification({
+      provider_name: provider.name,
+      category_name: inProgressBooking.category_name,
+      services: inProgressBooking.services,
+    });
+    const n1data = {
+      provider_id: state.id,
+      customer_id: selectedRequest.customer_id,
+      booking_id: selectedRequest.booking_id,
+      description: notifications.customer,
+      status: 'unread',
+    };
+    const n2data = {
+      provider_id: state.id,
+      customer_id: selectedRequest.customer_id,
+      booking_id: selectedRequest.booking_id,
+      description: notifications.provider,
+      status: 'unread',
+    };
+    await generateCustomerNotification(n1data);
+    await generateProviderNotification(n2data);
     // if (res.id !== undefined) {
     setBeforeModel(false);
     setStartWorking(true);
@@ -206,7 +278,27 @@ export const Home = ({navigation}: any) => {
     };
     const res = await updateBookingSubmission(inProgressBooking.id, data);
     console.log(res);
-
+    const notifications = generateAfterWorkImageSubmitNotification({
+      provider_name: provider.name,
+      category_name: inProgressBooking.category_name,
+      services: inProgressBooking.services,
+    });
+    const n1data = {
+      provider_id: state.id,
+      customer_id: selectedRequest.customer_id,
+      booking_id: selectedRequest.booking_id,
+      description: notifications.customer,
+      status: 'unread',
+    };
+    const n2data = {
+      provider_id: state.id,
+      customer_id: selectedRequest.customer_id,
+      booking_id: selectedRequest.booking_id,
+      description: notifications.provider,
+      status: 'unread',
+    };
+    await generateCustomerNotification(n1data);
+    await generateProviderNotification(n2data);
     // if (res.id !== undefined) {
     setAfterModel(false);
     setExtraWork(true);
@@ -224,7 +316,27 @@ export const Home = ({navigation}: any) => {
       };
       const res = await updateBookingSubmission(inProgressBooking.id, data);
       console.log(res, 'Update time response');
-
+      const notifications = generatePauseBookingNotification({
+        provider_name: provider.name,
+        category_name: inProgressBooking.category_name,
+        services: inProgressBooking.services,
+      });
+      const n1data = {
+        provider_id: state.id,
+        customer_id: selectedRequest.customer_id,
+        booking_id: selectedRequest.booking_id,
+        description: notifications.customer,
+        status: 'unread',
+      };
+      const n2data = {
+        provider_id: state.id,
+        customer_id: selectedRequest.customer_id,
+        booking_id: selectedRequest.booking_id,
+        description: notifications.provider,
+        status: 'unread',
+      };
+      await generateCustomerNotification(n1data);
+      await generateProviderNotification(n2data);
       // setStartWorking(true);
     }
     //console.log(image, 'Image data');
@@ -256,6 +368,27 @@ export const Home = ({navigation}: any) => {
       status: 'completed',
     };
     const res1 = await updateBooking(inProgressBooking.id, data1);
+    const notifications = generatePauseBookingNotification({
+      provider_name: provider.name,
+      category_name: inProgressBooking.category_name,
+      services: inProgressBooking.services,
+    });
+    const n1data = {
+      provider_id: state.id,
+      customer_id: selectedRequest.customer_id,
+      booking_id: selectedRequest.booking_id,
+      description: notifications.customer,
+      status: 'unread',
+    };
+    const n2data = {
+      provider_id: state.id,
+      customer_id: selectedRequest.customer_id,
+      booking_id: selectedRequest.booking_id,
+      description: notifications.provider,
+      status: 'unread',
+    };
+    await generateCustomerNotification(n1data);
+    await generateProviderNotification(n2data);
     //console.log(res1, 'update');
   }
   async function onToggleStatus(status: boolean) {

@@ -1,12 +1,32 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {getProviderNotifications} from '../../../api/providerNotifications';
 import {GlobalStyles} from '../../../common/styles';
 import {PageNameText} from '../../../components/texts/pageNameText';
 import {FONTS} from '../../../constants/fonts';
 import {NotificationCard} from './components/notificationCard';
 
 export const Notification = () => {
+  const [notifications, setNotifications]: any = useState([]);
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
+  async function getData() {
+    const res = await getProviderNotifications(state.id);
+    if (res !== undefined) {
+      setNotifications(res);
+    }
+    //console.log(res, 'notif');
+  }
+
+  function renderNotifications({item}: any) {
+    return <NotificationCard title={item.description} />;
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
       <View
@@ -22,14 +42,7 @@ export const Notification = () => {
         </Text>
       </View>
       <View style={{marginTop: 10, width: '100%'}}>
-        <NotificationCard />
-        <NotificationCard read />
-        <NotificationCard />
-        <NotificationCard />
-        <NotificationCard />
-        <NotificationCard />
-        <NotificationCard read />
-        <NotificationCard />
+        <FlatList data={notifications} renderItem={renderNotifications} />
       </View>
     </SafeAreaView>
   );

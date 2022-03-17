@@ -96,33 +96,38 @@ export const Drawer = ({navigation}: any) => {
   }, []);
 
   return (
-    <SafeAreaView style={GlobalStyles.screenMain}>
-      <Avatar customSize size={70} />
-      <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
-      <View style={styles.ratingCont}>
-        <Image
-          style={[styles.rating, {marginRight: 5}]}
-          source={ICONS.rating}
-        />
-        <Text style={styles.ratingTxt}>4.5 out of 5</Text>
-      </View>
-      <Divider />
-      <ScrollableView>
-        <View style={{width: '80%', marginTop: 10}}>
-          {options.map(renderOptions)}
+    <View style={{flex: 1, flexDirection: 'row'}}>
+      <View style={{width: '20%', backgroundColor: COLORS.WF2}} />
+      <SafeAreaView style={[styles.main, styles.elevated_card]}>
+        <Avatar customSize size={70} />
+        <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
+        <View style={styles.ratingCont}>
+          <Image
+            style={[styles.rating, {marginRight: 5}]}
+            source={ICONS.rating}
+          />
+          <Text style={styles.ratingTxt}>4.5 out of 5</Text>
         </View>
-        <View style={{width: '80%', marginTop: 20}}>
-          <DrawerOption name="Log-out" iconName="log-out-outline" />
-        </View>
-      </ScrollableView>
-    </SafeAreaView>
+        <Divider />
+        <ScrollableView>
+          <View style={{width: '80%', marginTop: 10}}>
+            {options.map(renderOptions)}
+          </View>
+          <View style={{width: '80%', marginTop: 20}}>
+            <DrawerOption name="Log-out" iconName="log-out-outline" />
+          </View>
+        </ScrollableView>
+      </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
+    //flex: 1,
     alignItems: 'center',
+    width: '80%',
+    alignSelf: 'flex-end',
   },
   name: {
     fontFamily: FONTS.P_SEMIBOLD,
@@ -145,5 +150,17 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'center',
     marginBottom: 10,
+  },
+  elevated_card: {
+    //padding: 10,
+    elevation: 1,
+    shadowColor: 'rgba(0,0,0, .4)', // IOS
+    shadowOffset: {height: 1, width: 1}, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    backgroundColor: 'white',
+    //borderRadius: 10,
+    //marginVertical: 10,
+    height: '100%',
   },
 });

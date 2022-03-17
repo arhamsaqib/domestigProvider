@@ -52,7 +52,7 @@ export const IncomingRequest = (props: Props) => {
         </PageNameText>
         <View style={styles.categoryNameContainer}>
           <GreenCircle broom s41 />
-          <Text style={[styles.name, {marginLeft: 5}]}>
+          <Text style={[styles.name, {marginLeft: 10, width: '80%'}]}>
             {props.data.category_name +
               ' (' +
               props.data.bookingServices +

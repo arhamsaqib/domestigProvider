@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {showBookingSubmissionByPIDnBID} from '../../../api/bookingSubmission';
 import {getCustomerById} from '../../../api/customer';
+import {generateCustomerNotification} from '../../../api/customerNotifications';
 import {viewInvoiceByBookingId} from '../../../api/invoice';
+import {generateProviderNotification} from '../../../api/providerNotifications';
 import {saveCustomerReview} from '../../../api/rating';
 import {GlobalStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
@@ -14,6 +16,7 @@ import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
 import {ICONS} from '../../../constants/icons';
+import {generateReviewNotification} from '../../../helpers/generateNotification';
 import {ScrollableView} from '../../../helpers/scrollableView';
 import {GiveReview} from '../home/components/giveReview';
 import {ProviderDetails} from './provider/providerDetails';
@@ -26,6 +29,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
   const [customer, setCustomer]: any = useState([]);
   const [submission, setSubmission]: any = useState([]);
   const [invoice, setInvoice]: any = useState([]);
+  const [review, setReview]: any = useState([]);
 
   async function getData() {
     setLoader(true);
@@ -60,6 +64,27 @@ export const HistoryDetails = ({navigation, route}: any) => {
       setRatingModal(false);
     });
     console.log(res, 'Review');
+    const notifications = generateReviewNotification({
+      services: details.services,
+      provider_name: 'Provider',
+      category_name: details.category_name,
+    });
+    const n1data = {
+      provider_id: details.provider_id,
+      customer_id: details.customer_id,
+      booking_id: details.booking_id,
+      description: notifications.customer,
+      status: 'unread',
+    };
+    const n2data = {
+      provider_id: details.provider_id,
+      customer_id: details.customer_id,
+      booking_id: details.booking_id,
+      description: notifications.provider,
+      status: 'unread',
+    };
+    await generateCustomerNotification(n1data);
+    await generateProviderNotification(n2data);
   }
   useEffect(() => {
     getData();
