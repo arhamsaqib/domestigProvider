@@ -52,11 +52,13 @@ import {
 } from '../../../helpers/generateNotification';
 import {FieldNameText} from '../../../components/texts/fieldNameText';
 import {generateGreetings} from '../../../helpers/greetings';
+import {MEDIA_URL} from '../../../constants/url';
 
 export const Home = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
 
   const [verificationCode, setVerificationCode]: any = useState('');
+  const [avatar, setAvatar]: any = useState(null);
   const [phoneVerficationModal, setPhoneVerificationModal] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -89,6 +91,9 @@ export const Home = ({navigation}: any) => {
     const prov = await getProviderById(state.id);
     if (prov !== undefined) {
       setProvider(prov);
+      if (prov.avatar.length > 1) {
+        setAvatar(MEDIA_URL + prov.avatar);
+      }
     }
     if (prov.working_status === 'active') {
       setToggle(true);
@@ -411,7 +416,7 @@ export const Home = ({navigation}: any) => {
     <SafeAreaView style={GlobalStyles.screenMain}>
       <View style={[GlobalStyles.row, GlobalStyles.subView, {marginTop: 50}]}>
         <View style={[GlobalStyles.row, {width: '45%'}]}>
-          <Avatar customSize size={50} />
+          <Avatar customSize size={50} source={avatar && {uri: avatar}} />
           <View style={{height: '90%', alignSelf: 'center'}}>
             <Text style={styles.gm}>{generateGreetings()}</Text>
             <Text style={styles.name}>{provider.name}</Text>

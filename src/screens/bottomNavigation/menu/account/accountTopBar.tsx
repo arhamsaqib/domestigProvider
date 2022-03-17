@@ -1,5 +1,5 @@
-import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Avatar} from '../../../../components/avatar';
 import {COLORS} from '../../../../constants/colors';
@@ -10,10 +10,43 @@ import {ICONS} from '../../../../constants/icons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BackIcon} from '../../../../components/backIcon';
 import Icon from 'react-native-vector-icons/Ionicons';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import {uploadImage} from '../../../../api/uploadImage';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {getProviderById, updateProvider} from '../../../../api/provider';
+import {MEDIA_URL} from '../../../../constants/url';
 
 const TobTabs = createMaterialTopTabNavigator();
 
 export const AccountTopBar = ({navigation}: any) => {
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
+  const [loader, setLoader] = useState(false);
+  const [fileUri, setFileUri]: any = useState(null);
+  async function onImagePick() {
+    let result: any = await ImageCropPicker.openPicker({});
+    // console.log(result, 'Image picked');
+    if (!result.cancelled) {
+      setFileUri(result.sourceURL.toString());
+    }
+    setLoader(true);
+    const res: any = await uploadImage(result);
+    console.log(res, 'upload res 1');
+    if (res.id !== undefined) {
+      const up = await updateProvider(state.id, {avatar: res.uri}).finally(() =>
+        setLoader(false),
+      );
+    }
+  }
+  async function getData() {
+    setLoader(true);
+    const res = await getProviderById(state.id).finally(() => setLoader(false));
+    if (res !== undefined) {
+      if (res.avatar.length > 1) setFileUri(MEDIA_URL + res.avatar);
+    }
+  }
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <>
       <View style={styles.card}>
@@ -31,7 +64,14 @@ export const AccountTopBar = ({navigation}: any) => {
             </View>
           </View>
           <View style={{marginVertical: 20}} />
-          <Avatar customSize size={110} upload pressable />
+          <Avatar
+            onPress={onImagePick}
+            customSize
+            size={110}
+            upload
+            source={fileUri && {uri: fileUri}}
+            pressable
+          />
           <Text style={[styles.name, {marginVertical: 3}]}>Arham Saqib</Text>
           <View
             style={{
@@ -44,6 +84,7 @@ export const AccountTopBar = ({navigation}: any) => {
             />
             <Text style={styles.ratingTxt}>{'4.2'} out of 5</Text>
           </View>
+          {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
         </SafeAreaView>
       </View>
       <TobTabs.Navigator
