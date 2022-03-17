@@ -12,6 +12,7 @@ import {GlobalStyles} from '../../../../common/styles';
 import {useNavigation} from '@react-navigation/native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getProviderById} from '../../../../api/provider';
+import {MEDIA_URL} from '../../../../constants/url';
 
 export const Drawer = ({navigation}: any) => {
   //const navigation = useNavigation();
@@ -85,10 +86,14 @@ export const Drawer = ({navigation}: any) => {
 
   const [user, setUser]: any = useState([]);
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
+  const [avatar, setAvatar]: any = useState(null);
   async function getData() {
     const res = await getProviderById(state.id);
     if (res !== undefined) {
       setUser(res);
+      if (res.avatar.length > 1) {
+        setAvatar(MEDIA_URL + res.avatar);
+      }
     }
   }
   useEffect(() => {
@@ -99,7 +104,7 @@ export const Drawer = ({navigation}: any) => {
     <View style={{flex: 1, flexDirection: 'row'}}>
       <View style={{width: '20%', backgroundColor: COLORS.WF2}} />
       <SafeAreaView style={[styles.main, styles.elevated_card]}>
-        <Avatar customSize size={70} />
+        <Avatar customSize size={70} source={avatar && {uri: avatar}} />
         <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
         <View style={styles.ratingCont}>
           <Image
