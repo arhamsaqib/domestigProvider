@@ -1,4 +1,4 @@
-import {del, get, post} from './requestStructure';
+import {del, get, post, put} from './requestStructure';
 
 const endpoint = 'provider-notifications';
 
@@ -17,5 +17,16 @@ export async function generateProviderNotification(data: notifications) {
 }
 export async function getProviderNotifications(id: string) {
   const res = await get(endpoint + '/' + id);
+  return res;
+}
+export async function deleteProviderNotifications(id: string) {
+  const res = await del(endpoint + '/' + id);
+  return res;
+}
+export async function updateProviderNotification(
+  id: string,
+  data: notifications,
+) {
+  const res = await put(endpoint + '/' + id, data);
   return res;
 }

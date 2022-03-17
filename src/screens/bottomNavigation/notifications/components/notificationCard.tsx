@@ -11,6 +11,7 @@ interface Props {
   title?: string;
   time?: string;
   date?: any;
+  onPress?(): void;
 }
 
 export const NotificationCard = (props: Props) => {
@@ -18,7 +19,7 @@ export const NotificationCard = (props: Props) => {
 
   return (
     <TouchableOpacity
-      style={[styles.main, (props.read && styles.read) ?? styles.unread]}>
+      style={[styles.main, styles.unread, props.read && styles.read]}>
       <View style={{width: '5%', justifyContent: 'center'}}>
         <GreenCircle broom s40 />
       </View>
@@ -42,7 +43,7 @@ export const NotificationCard = (props: Props) => {
           justifyContent: 'center',
         }}>
         <Icon
-          onPress={() => console.log()}
+          onPress={props.onPress}
           name="ellipsis-vertical-outline"
           size={20}
         />

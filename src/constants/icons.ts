@@ -26,8 +26,12 @@ const onboarding1 = require('../assets/images/onboarding/ob1.png');
 const onboarding2 = require('../assets/images/onboarding/ob2.png');
 const onboarding3 = require('../assets/images/onboarding/ob3.png');
 const earningbg = require('../assets/images/bg/earningbg.png');
+const markRead = require('../assets/images/icons/markRead.png');
+const bin = require('../assets/images/icons/bin.png');
 
 const ICONS = {
+  bin,
+  markRead,
   upload,
   verified,
   logo_white,
