@@ -17,20 +17,22 @@ interface Props {
   modalVisibility: boolean;
   data?: any;
   onArrivedPress?(): void;
+  customer?: any;
 }
 
 export const WaitingProvider = (props: Props) => {
-  const [customer, setCustomer]: any = useState([]);
-  async function getData() {
-    const res = await getCustomerById(props.data.customer_id);
+  const {customer} = props;
+  // const [customer, setCustomer]: any = useState([]);
+  // async function getData() {
+  //   const res = await getCustomerById(props.data.customer_id);
 
-    if (res !== undefined) {
-      setCustomer(res);
-    }
-  }
-  useEffect(() => {
-    getData();
-  }, []);
+  //   if (res !== undefined) {
+  //     setCustomer(res);
+  //   }
+  // }
+  // useEffect(() => {
+  //   getData();
+  // }, []);
   return (
     <BottomCard
       style={{height: '30%', alignItems: 'center'}}

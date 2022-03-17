@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   SafeAreaView,
   StyleSheet,
@@ -103,14 +104,14 @@ export const Home = ({navigation}: any) => {
     const res1 = await getProviderInProgress(state.id);
     if (res1.id !== undefined) {
       setinProgressBooking(res1);
+      const cus = await getCustomerById(res1.customer_id);
+      if (cus !== undefined) {
+        setCustomer(cus);
+      }
       if (res1.verified === 'true') {
         setProviderArrived(true);
       } else {
         setWaitingProvider(true);
-      }
-      const cus = await getCustomerById(inProgressBooking.customer_id);
-      if (cus !== undefined) {
-        setCustomer(cus);
       }
     }
     const submission = await showBookingSubmissionByPIDnBID({
@@ -214,6 +215,7 @@ export const Home = ({navigation}: any) => {
 
       getData();
     } else {
+      Alert.alert('Incorrect code');
       console.log('code not matched');
     }
   }
@@ -456,6 +458,7 @@ export const Home = ({navigation}: any) => {
       <WaitingProvider
         modalVisibility={waitingProvider}
         data={inProgressBooking}
+        customer={customer}
         onArrivedPress={() => {
           setWaitingProvider(false);
           setPhoneVerificationModal(true);

@@ -26,3 +26,32 @@ export const placeAutocomplete = async (place: string) => {
       })
   );
 };
+export const findPlaceByText = async (place: string) => {
+  const end =
+    'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?' +
+    'input=' +
+    place +
+    '&inputtype=textquery&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&key=' +
+    GOOGLE_MAPS_API_KEY;
+  const endp = end.replace(/\s/g, '');
+
+  return (
+    fetch(endp, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+
+      //body: JSON.stringify(data),
+    })
+      //.then(response => console.log(response.status, 'Status of the request'))
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.error(error, 'error');
+      })
+  );
+};

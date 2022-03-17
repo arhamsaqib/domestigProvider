@@ -16,7 +16,7 @@ import {createProvider} from '../../api/provider';
 import updateCurrentUserAction from '../../redux/action/currectUserAction';
 import {useStore} from 'react-redux';
 import {MultipleOptions} from '../../components/multipleOptions';
-import {placeAutocomplete} from '../../api/places';
+import {findPlaceByText, placeAutocomplete} from '../../api/places';
 import {CountriesOptions} from '../../components/countriesOptions';
 
 export const Signup = ({navigation}: any) => {
@@ -30,6 +30,7 @@ export const Signup = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
   const [confirmPassword, setConfirmPassword]: any = useState('');
   const [place, setPlace]: any = useState('');
+  const [placeIinfo, setPlaceInfo]: any = useState([]);
   const [showPlaces, setShowPlaces] = useState(false);
   const [showCountries, setShowCountries] = useState(false);
   const store = useStore();
@@ -49,8 +50,8 @@ export const Signup = ({navigation}: any) => {
       fuid: uid,
       status: 'active',
       location: location,
-      latitude: '',
-      longitude: '',
+      latitude: placeIinfo.geometry.location.lat,
+      longitude: placeIinfo.geometry.location.lng,
       phone: phone,
       country: country,
     };
@@ -103,12 +104,19 @@ export const Signup = ({navigation}: any) => {
   async function findLocation(str: string) {
     const res = await placeAutocomplete(str);
     setPlace(res);
-    console.log(res);
   }
+
+  async function findPlace(place: string) {
+    const res = await findPlaceByText(place);
+    console.log(res, 'Place by text');
+    setPlaceInfo(res.candidates[0]);
+  }
+
   function onSelect(item: any) {
-    console.log(item, 'Selected Item');
+    //console.log(item, 'Selected Item');
     setLocation(item.description);
     setShowPlaces(false);
+    findPlace(item.description);
   }
   return (
     <>
