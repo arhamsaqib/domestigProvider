@@ -53,6 +53,7 @@ import {
 import {FieldNameText} from '../../../components/texts/fieldNameText';
 import {generateGreetings} from '../../../helpers/greetings';
 import {MEDIA_URL} from '../../../constants/url';
+import {uploadImage} from '../../../api/uploadImage';
 
 export const Home = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -78,7 +79,6 @@ export const Home = ({navigation}: any) => {
   const [timeTaken, setTimeTaken]: any = useState();
   const [timeStart, setTimeStart]: any = useState();
   const [extraWork, setExtraWork]: any = useState(false);
-
   const [timer, setTimer] = useState(false);
 
   useEffect(() => {
@@ -240,15 +240,21 @@ export const Home = ({navigation}: any) => {
   }
   async function onBeforeImageSubmit(image: any) {
     //console.log(image, 'Image data');
-    const data = {
-      provider_id: state.id,
-      booking_id: inProgressBooking.id,
-      //before_work_image: image.data,
-      before_work_image: image.sourceURL,
-      time_taken: '00:00:00',
-    };
-    const res = await createBookingSubmission(data);
-    console.log(res);
+
+    const img: any = await uploadImage(image);
+
+    if (img.id !== undefined) {
+      const data = {
+        provider_id: state.id,
+        booking_id: inProgressBooking.id,
+        //before_work_image: image.data,
+        before_work_image: img.uri,
+        time_taken: '00:00:00',
+      };
+      const res = await createBookingSubmission(data);
+      console.log(res);
+    }
+
     const notifications = generateBeforeWorkImageSubmitNotification({
       provider_name: provider.name,
       category_name: inProgressBooking.category_name,
@@ -278,15 +284,18 @@ export const Home = ({navigation}: any) => {
   }
   async function onAfterImageSubmit(image: any) {
     //console.log(image, 'Image data');
-    const data = {
-      provider_id: state.id,
-      booking_id: inProgressBooking.id,
-      //before_work_image: image.data,
-      after_work_image: image.sourceURL,
-      time_taken: timeTaken,
-    };
-    const res = await updateBookingSubmission(inProgressBooking.id, data);
-    console.log(res);
+    const img: any = await uploadImage(image);
+    if (img.id !== undefined) {
+      const data = {
+        provider_id: state.id,
+        booking_id: inProgressBooking.id,
+        //before_work_image: image.data,
+        after_work_image: img.uri,
+        time_taken: timeTaken,
+      };
+      const res = await updateBookingSubmission(inProgressBooking.id, data);
+      console.log(res);
+    }
     const notifications = generateAfterWorkImageSubmitNotification({
       provider_name: provider.name,
       category_name: inProgressBooking.category_name,
