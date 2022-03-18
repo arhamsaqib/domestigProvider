@@ -8,8 +8,6 @@ import {FONTS} from '../../../../constants/fonts';
 import {ICONS} from '../../../../constants/icons';
 import {DrawerOption} from './drawerOption';
 import {ScrollableView} from '../../../../helpers/scrollableView';
-import {GlobalStyles} from '../../../../common/styles';
-import {useNavigation} from '@react-navigation/native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getProviderById} from '../../../../api/provider';
 import {MEDIA_URL} from '../../../../constants/url';
