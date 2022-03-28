@@ -3,23 +3,46 @@ import {StyleSheet, Text, View} from 'react-native';
 import {Avatar} from '../../../../../components/avatar';
 import {COLORS} from '../../../../../constants/colors';
 import {FONTS} from '../../../../../constants/fonts';
+import {MEDIA_URL} from '../../../../../constants/url';
+import moment from 'moment';
 
 interface Props {
   item?: any;
 }
 
 export const ProviderReview = (props: Props) => {
+  const dt = new Date(props.item.created_at);
+
   var desc =
     'Lorem Ipsum is simply dummy text of the printing and typesetting industry. galley of type and scrambled it to make a type specimen book.';
   return (
     <View style={styles.main}>
       <View style={styles.avatarCont}>
-        <Avatar customSize size={41} />
+        <Avatar
+          customSize
+          size={41}
+          source={
+            props.item.customer_avatar && {
+              uri: MEDIA_URL + props.item.customer_avatar,
+            }
+          }
+        />
       </View>
       <View style={styles.col}>
-        <Text style={[styles.name, {marginBottom: 5}]}>{'hi'}</Text>
-        <Text style={[styles.desc, {marginBottom: 5}]}>{desc}</Text>
-        <Text style={[styles.time, {marginBottom: 5}]}>2 hours ago</Text>
+        <Text style={[styles.name, {marginBottom: 5}]}>
+          {props.item.customer_name ?? 'hi'}
+        </Text>
+        <Text style={[styles.desc, {marginBottom: 5}]}>
+          {props.item.review ?? desc}
+        </Text>
+        <Text style={[styles.time, {marginBottom: 5}]}>
+          {' '}
+          {moment
+            .utc(dt.toLocaleDateString())
+            .local()
+            .startOf('seconds')
+            .fromNow()}
+        </Text>
       </View>
     </View>
   );

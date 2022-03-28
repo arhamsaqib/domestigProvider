@@ -22,6 +22,7 @@ export const AccountTopBar = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
   const [loader, setLoader] = useState(false);
   const [fileUri, setFileUri]: any = useState(null);
+  const [provider, setProvider]: any = useState([]);
   async function onImagePick() {
     let result: any = await ImageCropPicker.openPicker({});
     // console.log(result, 'Image picked');
@@ -43,6 +44,7 @@ export const AccountTopBar = ({navigation}: any) => {
     if (res !== undefined) {
       if (res.avatar.length > 1) setFileUri(MEDIA_URL + res.avatar);
     }
+    setProvider(res);
   }
   useEffect(() => {
     getData();
@@ -72,7 +74,9 @@ export const AccountTopBar = ({navigation}: any) => {
             source={fileUri && {uri: fileUri}}
             pressable
           />
-          <Text style={[styles.name, {marginVertical: 3}]}>Arham Saqib</Text>
+          <Text style={[styles.name, {marginVertical: 3}]}>
+            {provider.name}
+          </Text>
           <View
             style={{
               flexDirection: 'row',
@@ -82,7 +86,9 @@ export const AccountTopBar = ({navigation}: any) => {
               source={ICONS.rating}
               style={[styles.rating, {marginRight: 5}]}
             />
-            <Text style={styles.ratingTxt}>{'4.2'} out of 5</Text>
+            <Text style={styles.ratingTxt}>
+              {parseFloat(provider.rating).toFixed(1)} out of 5
+            </Text>
           </View>
           {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
         </SafeAreaView>

@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import StarRating from 'react-native-star-rating';
+import {getBookingReviews} from '../../../api/bookingReview';
 import {showBookingSubmissionByPIDnBID} from '../../../api/bookingSubmission';
 import {getCustomerById} from '../../../api/customer';
 import {generateCustomerNotification} from '../../../api/customerNotifications';
@@ -16,6 +18,7 @@ import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
 import {ICONS} from '../../../constants/icons';
+import {MEDIA_URL} from '../../../constants/url';
 import {generateReviewNotification} from '../../../helpers/generateNotification';
 import {ScrollableView} from '../../../helpers/scrollableView';
 import {GiveReview} from '../home/components/giveReview';
@@ -49,6 +52,10 @@ export const HistoryDetails = ({navigation, route}: any) => {
     }
     if (inv !== undefined) {
       setInvoice(inv);
+    }
+    const bknr = await getBookingReviews(details.id);
+    if (bknr !== undefined) {
+      setReview(bknr);
     }
     //console.log(res, 'provider');
   }
@@ -85,6 +92,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
     };
     await generateCustomerNotification(n1data);
     await generateProviderNotification(n2data);
+    getData();
   }
   useEffect(() => {
     getData();
@@ -154,6 +162,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
               size={41}
               onPress={() => setCard(true)}
               pressable
+              source={customer.avatar && {uri: MEDIA_URL + customer.avatar}}
             />
             <Text style={[styles.name, {marginLeft: 5}]}>{customer.name}</Text>
           </View>
@@ -179,7 +188,15 @@ export const HistoryDetails = ({navigation, route}: any) => {
             <Text style={[styles.field, {marginBottom: 5}]}>
               Before work image
             </Text>
-            <Image source={ICONS.noimage} style={styles.img} />
+            <Image
+              source={
+                (submission.before_work_image && {
+                  uri: MEDIA_URL + submission.before_work_image,
+                }) ??
+                ICONS.noimage
+              }
+              style={styles.img}
+            />
           </View>
           <View
             style={{
@@ -190,7 +207,15 @@ export const HistoryDetails = ({navigation, route}: any) => {
             <Text style={[styles.field, {marginBottom: 5}]}>
               After work image
             </Text>
-            <Image source={ICONS.noimage} style={styles.img} />
+            <Image
+              source={
+                (submission.after_work_image && {
+                  uri: MEDIA_URL + submission.after_work_image,
+                }) ??
+                ICONS.noimage
+              }
+              style={styles.img}
+            />
           </View>
         </View>
         <View style={{width: '90%', marginVertical: 20}}>
@@ -275,9 +300,41 @@ export const HistoryDetails = ({navigation, route}: any) => {
           <Text style={[styles.name, {fontSize: 13}]}>Amount</Text>
           <Text style={[styles.name, {fontSize: 13}]}>${invoice.amount}</Text>
         </View>
-        <View style={{width: '90%', marginVertical: 20}}>
-          <MyButton title="Leave Review" onPress={() => setRatingModal(true)} />
-        </View>
+        {review.review_to_provider && (
+          <View
+            style={{
+              width: '90%',
+              // flexDirection: 'row',
+              //alignItems: 'center',
+              //justifyContent: 'space-between',
+              marginBottom: 10,
+            }}>
+            <Text style={styles.head}>Review</Text>
+            <View style={{width: '30%'}}>
+              <StarRating
+                disabled={true}
+                maxStars={5}
+                starSize={17}
+                starStyle={{marginRight: 3}}
+                fullStarColor={'#D7B400'}
+                rating={parseInt(review.provider_stars)}
+                // animation="tada"
+                //selectedStar={rating => setRating(rating)}
+              />
+            </View>
+            <Text style={[styles.name, {fontSize: 13, color: 'grey'}]}>
+              {review.review_to_provider}
+            </Text>
+          </View>
+        )}
+        {details.customer_id && !review.review_to_customer && (
+          <View style={{width: '90%', marginVertical: 20}}>
+            <MyButton
+              title="Leave Review"
+              onPress={() => setRatingModal(true)}
+            />
+          </View>
+        )}
       </ScrollableView>
     </SafeAreaView>
   );

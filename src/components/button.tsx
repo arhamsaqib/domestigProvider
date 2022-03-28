@@ -55,7 +55,11 @@ export const MyButton = (props: Props) => {
           )}
         </>
       )}
-      {loading && <ActivityIndicator color={COLORS.WHITE} />}
+      {loading && (
+        <ActivityIndicator
+          color={props.secondary ? COLORS.MAIN_1 : COLORS.WHITE}
+        />
+      )}
     </TouchableOpacity>
   );
 };

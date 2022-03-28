@@ -109,7 +109,9 @@ export const Drawer = ({navigation}: any) => {
             style={[styles.rating, {marginRight: 5}]}
             source={ICONS.rating}
           />
-          <Text style={styles.ratingTxt}>4.5 out of 5</Text>
+          <Text style={styles.ratingTxt}>
+            {parseFloat(user.rating).toFixed(1)} out of 5
+          </Text>
         </View>
         <Divider />
         <ScrollableView>

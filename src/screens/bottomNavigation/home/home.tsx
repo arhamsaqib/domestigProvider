@@ -54,6 +54,7 @@ import {FieldNameText} from '../../../components/texts/fieldNameText';
 import {generateGreetings} from '../../../helpers/greetings';
 import {MEDIA_URL} from '../../../constants/url';
 import {uploadImage} from '../../../api/uploadImage';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const Home = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -420,6 +421,14 @@ export const Home = ({navigation}: any) => {
     };
     const tg = await updateProvider(state.id, data);
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe: any = () => getData();
+
+      return () => unsubscribe();
+    }, []),
+  );
 
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
