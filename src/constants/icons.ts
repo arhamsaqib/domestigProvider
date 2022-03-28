@@ -28,8 +28,10 @@ const onboarding3 = require('../assets/images/onboarding/ob3.png');
 const earningbg = require('../assets/images/bg/earningbg.png');
 const markRead = require('../assets/images/icons/markRead.png');
 const bin = require('../assets/images/icons/bin.png');
+const forget = require('../assets/images/icons/forget.png');
 
 const ICONS = {
+  forget,
   bin,
   markRead,
   upload,

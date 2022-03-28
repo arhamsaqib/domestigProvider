@@ -51,7 +51,7 @@ export const ProviderArrived = (props: Props) => {
         onOutsidePress={props.onOutisdePress}>
         <ScrollableView>
           <View style={{width: '90%'}}>
-            <ProfileOverview name={provider.name} />
+            <ProfileOverview name={provider.name} data={provider} />
           </View>
           <View style={{width: '90%', marginVertical: 10}}>
             <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>

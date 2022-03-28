@@ -61,7 +61,7 @@ export const IncomingRequest = (props: Props) => {
         </View>
         <View style={{width: '90%', marginVertical: 10}}>
           <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>
-          <Text style={[styles.value]}>Lorem Ipsum is simply dummy text</Text>
+          <Text style={[styles.value]}>{props.data.location}</Text>
         </View>
         <View style={{width: '90%', marginVertical: 10}}>
           <Text style={[styles.field, {marginBottom: 5}]}>

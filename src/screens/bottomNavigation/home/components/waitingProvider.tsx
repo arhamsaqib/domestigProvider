@@ -40,7 +40,7 @@ export const WaitingProvider = (props: Props) => {
       onOutsidePress={props.onOutisdePress}>
       <ScrollableView>
         <View style={{width: '90%'}}>
-          <ProfileOverview name={customer.name} />
+          <ProfileOverview name={customer.name} data={customer} />
         </View>
         <View style={{width: '90%', marginVertical: 10}}>
           <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>

@@ -5,20 +5,20 @@ import {useState} from 'react';
 import {COLORS} from '../constants/colors';
 
 interface Props {
-  state?(val?: boolean): void;
+  onChangeVal?(val: boolean): void;
+  value?: boolean;
 }
 
 export const CheckBox = (props: Props) => {
-  const [state, setState] = useState(false);
+  const {value} = props;
   function onStateSet() {
-    setState(!state);
-    props.state && props.state(!setState);
+    props.onChangeVal && props.onChangeVal(!value);
   }
   return (
     <TouchableOpacity
       onPress={onStateSet}
-      style={[styles.main, !state && styles.inactive, state && styles.active]}>
-      {state && <Icon name="checkmark-outline" size={18} color={'white'} />}
+      style={[styles.main, !value && styles.inactive, value && styles.active]}>
+      <Icon name="checkmark-outline" size={18} color={'white'} />
     </TouchableOpacity>
   );
 };
