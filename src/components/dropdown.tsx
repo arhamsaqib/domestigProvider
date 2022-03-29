@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import {
+  StyleProp,
   StyleSheet,
   Text,
   TextInput,
   TextInputProps,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import {COLORS} from '../constants/colors';
 import {FONTS} from '../constants/fonts';
@@ -14,6 +16,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 interface Props extends TextInputProps {
   icon?: any;
   name?: string;
+  children?: any;
+  cardStyle?: StyleProp<ViewStyle>;
 }
 
 export const DropDown = (props: Props) => {
@@ -31,7 +35,9 @@ export const DropDown = (props: Props) => {
           <Icon name="chevron-down-outline" size={16} />
         </View>
       </TouchableOpacity>
-      {show && <View style={styles.card}></View>}
+      {show && (
+        <View style={[styles.card, props.cardStyle]}>{props.children}</View>
+      )}
     </>
   );
 };

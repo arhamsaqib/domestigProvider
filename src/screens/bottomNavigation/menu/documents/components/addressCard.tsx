@@ -5,14 +5,19 @@ import {COLORS} from '../../../../../constants/colors';
 import {FONTS} from '../../../../../constants/fonts';
 import {ICONS} from '../../../../../constants/icons';
 
-export const AddressCard = () => {
+interface Props {
+  idName?: any;
+  name?: any;
+}
+
+export const AddressCard = (props: Props) => {
   return (
     <View style={styles.main}>
       <View style={styles.row1}>
         <GreenCircle s41>
           <Image source={ICONS.attachment} style={{height: 21, width: 18}} />
         </GreenCircle>
-        <Text style={styles.name}>{'Home 1'}</Text>
+        <Text style={styles.name}>{props.idName + ' - ' + props.name}</Text>
       </View>
       <TouchableOpacity>
         <Image source={ICONS.pencil} style={styles.pencil} />

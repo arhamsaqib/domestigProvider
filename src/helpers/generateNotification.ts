@@ -110,8 +110,7 @@ export function generateReviewNotification(data: Notification) {
   const {provider_name, category_name, services} = data;
   const customerNotif =
     category_name + ' ' + services + ': ' + provider_name + 'left you a review';
-  const providerNotif =
-    category_name + ' ' + services + ': Your left a review.';
+  const providerNotif = category_name + ' ' + services + ': You left a review.';
   return {
     customer: customerNotif,
     provider: providerNotif,
