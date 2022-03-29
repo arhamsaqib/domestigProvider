@@ -18,12 +18,15 @@ import updateCurrentUserAction from '../../redux/action/currectUserAction';
 import {showProviderByFUID} from '../../api/provider';
 import auth from '@react-native-firebase/auth';
 import rememberMeAction from '../../redux/action/rememberMeAction';
+import {THIS_VERSION} from '../../constants/version';
+import {getLatestVersion} from '../../api/version';
 
 export const Login = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loader, setLoader] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [update, setUpdate] = useState(false);
 
   const store = useStore();
   const state = useSelector((state: RootStateOrAny) => state.rememberMe);
@@ -35,8 +38,24 @@ export const Login = ({navigation}: any) => {
     }
   }
 
+  async function appVersionCheck() {
+    const res = await getLatestVersion();
+    //console.log(res, 'App Version');
+    if (res.version !== undefined) {
+      const latest = parseFloat(res.version);
+      console.log(latest, 'Latest version');
+      if (latest > THIS_VERSION) {
+        setUpdate(true);
+        //console.log('Update');
+      } else {
+        //console.log('Dont Update');
+      }
+    }
+  }
+
   useEffect(() => {
     checkRememberMe();
+    appVersionCheck();
   }, []);
   async function verifyLaravelUser(uid: any) {
     const user = await showProviderByFUID(uid);
@@ -109,6 +128,16 @@ export const Login = ({navigation}: any) => {
           <PageNameText style={{marginVertical: 20}} white>
             Welcome Back
           </PageNameText>
+          {update && (
+            <FieldNameText
+              style={{
+                fontWeight: 'bold',
+                color: 'yellow',
+                //marginTop: 20,
+              }}>
+              A new update is available
+            </FieldNameText>
+          )}
         </SafeAreaView>
         <BottomSheet style={{marginTop: '5%'}}>
           <View style={{width: '90%', marginVertical: 20}}>
@@ -188,6 +217,7 @@ export const Login = ({navigation}: any) => {
             Sign up
           </FieldNameText>
         </FieldNameText>
+        <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
       </View>
     </>
   );
