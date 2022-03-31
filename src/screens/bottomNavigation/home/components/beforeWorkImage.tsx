@@ -34,15 +34,15 @@ export const BeforeWorkImage = (props: Props) => {
         Submit Before Work Image
       </PageNameText>
       <TouchableOpacity onPress={openGallery} style={styles.imageCont}>
-        {!image.sourceURL && (
+        {!image.path && (
           <>
             <Icon name="add-outline" color={COLORS.MAIN_BODYTEXT} size={20} />
             <FieldNameText>Upload New</FieldNameText>
           </>
         )}
-        {image.sourceURL && (
+        {image.path && (
           <Image
-            source={{uri: image.sourceURL}}
+            source={{uri: image.path}}
             style={{height: 80, width: 131, borderRadius: 3}}
           />
         )}

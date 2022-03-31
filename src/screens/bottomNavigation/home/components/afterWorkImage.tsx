@@ -19,9 +19,9 @@ export const AfterWorkImage = (props: Props) => {
   async function openGallery() {
     ImagePicker.openPicker({
       mediaType: 'photo',
-      includeBase64: true,
+      //includeBase64: true,
     }).then(image => {
-      //console.log(image);
+      console.log(image);
       setImage(image);
     });
   }
@@ -34,15 +34,15 @@ export const AfterWorkImage = (props: Props) => {
         Submit After Work Image
       </PageNameText>
       <TouchableOpacity onPress={openGallery} style={styles.imageCont}>
-        {!image.sourceURL && (
+        {!image.path && (
           <>
             <Icon name="add-outline" color={COLORS.MAIN_BODYTEXT} size={20} />
             <FieldNameText>Upload New</FieldNameText>
           </>
         )}
-        {image.sourceURL && (
+        {image.path && (
           <Image
-            source={{uri: image.sourceURL}}
+            source={{uri: image.path}}
             style={{height: 80, width: 131, borderRadius: 3}}
           />
         )}

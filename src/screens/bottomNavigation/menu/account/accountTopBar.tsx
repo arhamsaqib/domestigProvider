@@ -25,9 +25,9 @@ export const AccountTopBar = ({navigation}: any) => {
   const [provider, setProvider]: any = useState([]);
   async function onImagePick() {
     let result: any = await ImageCropPicker.openPicker({});
-    // console.log(result, 'Image picked');
+    console.log(result, 'Image picked');
     if (!result.cancelled) {
-      setFileUri(result.sourceURL.toString());
+      setFileUri(result.path.toString());
     }
     setLoader(true);
     const res: any = await uploadImage(result);
