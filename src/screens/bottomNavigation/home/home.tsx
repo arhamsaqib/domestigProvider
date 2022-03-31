@@ -89,7 +89,9 @@ export const Home = ({navigation}: any) => {
   async function getData() {
     setLoader(true);
 
-    const prov = await getProviderById(state.id);
+    const prov = await getProviderById(state.id).finally(() =>
+      setLoader(false),
+    );
     if (prov !== undefined) {
       setProvider(prov);
       if (prov.avatar.length > 1) {

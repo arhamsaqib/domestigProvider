@@ -7,6 +7,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import {DomestigProvider} from './src/screens/main/domestig';
+import {SplashWhite} from './src/screens/splash/splashWhite';
 
 const App = () => {
   LogBox.ignoreAllLogs();
@@ -19,7 +20,7 @@ const App = () => {
   const persistor = persistStore(store);
   return (
     <Provider store={store}>
-      <PersistGate persistor={persistor}>
+      <PersistGate persistor={persistor} loading={<SplashWhite />}>
         <DomestigProvider />
       </PersistGate>
     </Provider>

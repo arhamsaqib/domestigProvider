@@ -54,7 +54,10 @@ export const Signup = ({navigation}: any) => {
       longitude: placeIinfo.geometry.location.lng,
       phone: phone,
       country: country,
+      working_status: 'online',
     };
+    // console.log(data, 'send req');
+    // return;
     const user = await createProvider(data).finally(() => {
       setLoader(false);
     });

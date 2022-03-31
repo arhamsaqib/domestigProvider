@@ -40,7 +40,7 @@ export const Login = ({navigation}: any) => {
 
   async function appVersionCheck() {
     const res = await getLatestVersion();
-    //console.log(res, 'App Version');
+    console.log(res, 'App Version');
     if (res.version !== undefined) {
       const latest = parseFloat(res.version);
       console.log(latest, 'Latest version');
@@ -105,6 +105,7 @@ export const Login = ({navigation}: any) => {
       .then(userCredential => {
         setLoader(false);
         const uid = userCredential.user.uid;
+        userCredential.user.sendEmailVerification();
         verifyLaravelUser(uid);
         //console.log('User account created & signed in!');
       })
