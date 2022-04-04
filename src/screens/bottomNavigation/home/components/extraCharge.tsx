@@ -22,7 +22,7 @@ export const ExtraCharge = (props: Props) => {
   const [extraWorkAmount, setExtraWorkAmount]: any = useState(false);
   return (
     <BottomCard
-      style={[{height: '25%', alignItems: 'center'}, extra && {height: '50%'}]}
+      style={[{height: '30%', alignItems: 'center'}, extra && {height: '50%'}]}
       modalVisibility={props.modalVisibility}
       onOutsidePress={props.onOutisdePress}>
       {!extra && (

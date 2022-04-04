@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
   opt: {
     fontFamily: FONTS.P_REGULAR,
     fontSize: 15,
+    color: 'black',
   },
   imageCont: {
     backgroundColor: '#E4E4E4',

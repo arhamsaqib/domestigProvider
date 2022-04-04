@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -458,7 +459,13 @@ export const Home = ({navigation}: any) => {
         <PageNameText style={{marginBottom: 20}}>
           Incoming Requests
         </PageNameText>
-        <FlatList data={requests} renderItem={renderIncoming} />
+        <FlatList
+          refreshControl={
+            <RefreshControl onRefresh={getData} refreshing={loader} />
+          }
+          data={requests}
+          renderItem={renderIncoming}
+        />
         {requests.length < 1 && (
           <FieldNameText style={{alignSelf: 'center'}}>
             No new requests

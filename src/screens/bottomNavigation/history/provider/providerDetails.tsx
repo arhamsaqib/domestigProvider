@@ -8,6 +8,8 @@ import {Avatar} from '../../../../components/avatar';
 import {FONTS} from '../../../../constants/fonts';
 import {COLORS} from '../../../../constants/colors';
 import {ICONS} from '../../../../constants/icons';
+import {MEDIA_URL} from '../../../../constants/url';
+import {parse} from '@babel/core';
 
 const TobTabs = createMaterialTopTabNavigator();
 
@@ -24,7 +26,12 @@ export const ProviderDetails = (props: Props) => {
       onOutsidePress={props.onOutsidePress}
       modalVisibility={props.modalVisibility}>
       <View style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
-        <Avatar customSize size={80} verified />
+        <Avatar
+          customSize
+          source={props.data.avatar && {uri: MEDIA_URL + props.data.avatar}}
+          size={80}
+          verified
+        />
         <Text style={[styles.name, {marginVertical: 3}]}>
           {props.data.name}
         </Text>
@@ -37,7 +44,9 @@ export const ProviderDetails = (props: Props) => {
             source={ICONS.rating}
             style={[styles.rating, {marginRight: 5}]}
           />
-          <Text style={styles.ratingTxt}>{'4.2'} out of 5</Text>
+          <Text style={styles.ratingTxt}>
+            {parseFloat(props.data.rating).toFixed(1)} out of 5
+          </Text>
         </View>
       </View>
       <TobTabs.Navigator

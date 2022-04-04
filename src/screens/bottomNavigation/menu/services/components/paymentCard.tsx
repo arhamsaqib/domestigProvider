@@ -34,7 +34,7 @@ export const PaymentCard = (props: Props) => {
     getData();
   }, []);
   return (
-    <View style={styles.main}>
+    <TouchableOpacity onPress={props.onEditPress} style={styles.main}>
       <View style={styles.row1}>
         <GreenCircle s41>
           <Image source={ICONS.broom} style={{height: 19.83, width: 13.88}} />
@@ -54,7 +54,7 @@ export const PaymentCard = (props: Props) => {
           />
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

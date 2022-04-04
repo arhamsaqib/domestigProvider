@@ -93,7 +93,7 @@ export const StartWorking = (props: Props) => {
   return (
     <>
       <BottomCard
-        style={{height: '30%', alignItems: 'center'}}
+        style={{height: '35%', alignItems: 'center'}}
         modalVisibility={props.modalVisibility}
         cardTop
         cardTopChildren={

@@ -14,7 +14,7 @@ interface Props {
 
 export const ServicesCard = (props: Props) => {
   return (
-    <TouchableOpacity style={styles.main}>
+    <TouchableOpacity onPress={props.onPress} style={styles.main}>
       <View style={styles.row}>
         <Text style={styles.txt}>{props.name ?? 'Cat'}</Text>
         {!props.hideCheckmark && <CheckMark tick onPress={props.onPress} />}

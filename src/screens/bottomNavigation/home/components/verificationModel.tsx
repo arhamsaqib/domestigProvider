@@ -21,7 +21,7 @@ interface Props {
 export const PhoneVerificationModel = (props: Props) => {
   return (
     <BottomCard
-      style={{height: '25%', alignItems: 'center'}}
+      style={{height: '30%', alignItems: 'center'}}
       modalVisibility={props.modalVisibility}
       onOutsidePress={props.onOutisdePress}>
       <PageNameText style={{marginVertical: 10}}>

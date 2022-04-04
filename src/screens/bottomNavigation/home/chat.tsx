@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -104,45 +106,50 @@ export const Chat = ({route, navigation}: any) => {
 
   return (
     <SafeAreaView style={[GlobalStyles.screenMain]}>
-      <View
-        style={[GlobalStyles.subView, {marginTop: 10, alignItems: 'center'}]}>
-        <Avatar customSize size={45} />
-        <PageNameText onPress={getData} style={{fontSize: 15}}>
-          {route.params.customer_details.name}
-        </PageNameText>
-      </View>
-      <View style={styles.back}>
-        <Icon
-          onPress={() => navigation.goBack()}
-          name="arrow-back-outline"
-          color={'black'}
-          size={20}
-        />
-      </View>
-      <View style={{width: '90%', marginTop: 10, height: '85%'}}>
-        <FlatList
-          ref={flatListRef}
-          data={allMessages}
-          renderItem={renderMessages}
-        />
-      </View>
-      <View style={styles.bottomBar}>
-        <View style={[{width: '10%'}, styles.iv]}>
-          <Icon name="attach-outline" size={20} />
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 120 : 25}
+        style={{width: '100%', alignItems: 'center'}}>
+        <View
+          style={[GlobalStyles.subView, {marginTop: 10, alignItems: 'center'}]}>
+          <Avatar customSize size={45} />
+          <PageNameText onPress={getData} style={{fontSize: 15}}>
+            {route.params.customer_details.name}
+          </PageNameText>
         </View>
-        <View style={[{width: '70%'}, styles.iv]}>
-          <TextInput
-            style={{fontFamily: FONTS.P_Light, height: 45, width: '100%'}}
-            placeholder={'Write your message..'}
-            placeholderTextColor={COLORS.MAIN_SUBTEXT}
-            onChangeText={setNewMessage}
-            value={newMessage}
+        <View style={styles.back}>
+          <Icon
+            onPress={() => navigation.goBack()}
+            name="arrow-back-outline"
+            color={'black'}
+            size={20}
           />
         </View>
-        <View style={[{width: '20%'}, styles.iv]}>
-          <SendButton onPress={onSendMessage} />
+        <View style={{width: '90%', marginTop: 10, height: '85%'}}>
+          <FlatList
+            ref={flatListRef}
+            data={allMessages}
+            renderItem={renderMessages}
+          />
         </View>
-      </View>
+        <View style={styles.bottomBar}>
+          <View style={[{width: '10%'}, styles.iv]}>
+            <Icon name="attach-outline" size={20} />
+          </View>
+          <View style={[{width: '70%'}, styles.iv]}>
+            <TextInput
+              style={{fontFamily: FONTS.P_Light, height: 45, width: '100%'}}
+              placeholder={'Write your message..'}
+              placeholderTextColor={COLORS.MAIN_SUBTEXT}
+              onChangeText={setNewMessage}
+              value={newMessage}
+            />
+          </View>
+          <View style={[{width: '20%'}, styles.iv]}>
+            <SendButton onPress={onSendMessage} />
+          </View>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -163,6 +170,6 @@ const styles = StyleSheet.create({
   back: {
     position: 'absolute',
     left: 20,
-    top: 80,
+    top: 25,
   },
 });
