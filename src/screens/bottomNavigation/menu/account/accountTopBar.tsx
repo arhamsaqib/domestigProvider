@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Avatar} from '../../../../components/avatar';
 import {COLORS} from '../../../../constants/colors';
@@ -15,6 +22,8 @@ import {uploadImage} from '../../../../api/uploadImage';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getProviderById, updateProvider} from '../../../../api/provider';
 import {MEDIA_URL} from '../../../../constants/url';
+//@ts-ignore
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 
 const TobTabs = createMaterialTopTabNavigator();
 
@@ -49,68 +58,80 @@ export const AccountTopBar = ({navigation}: any) => {
   useEffect(() => {
     getData();
   }, []);
+  var width = Dimensions.get('screen').width;
+  var height = Dimensions.get('screen').height;
   return (
     <>
-      <View style={styles.card}>
-        <SafeAreaView
-          style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
-          <View style={styles.row}>
-            <BackIcon black onPress={() => navigation.goBack()} />
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Icon
-                name="log-out-outline"
-                size={20}
-                color={COLORS.MAIN_SUBTEXT}
-              />
-              <Text style={[styles.log, {marginLeft: 5}]}>Log-out</Text>
+      <KeyboardAwareScrollView style={{flex: 0}}>
+        <View style={styles.card}>
+          <SafeAreaView
+            style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
+            <View style={styles.row}>
+              <BackIcon black onPress={() => navigation.goBack()} />
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon
+                  name="log-out-outline"
+                  size={20}
+                  color={COLORS.MAIN_SUBTEXT}
+                />
+                <Text style={[styles.log, {marginLeft: 5}]}>Log-out</Text>
+              </View>
             </View>
-          </View>
-          <View style={{marginVertical: 20}} />
-          <Avatar
-            onPress={onImagePick}
-            customSize
-            size={110}
-            upload
-            source={fileUri && {uri: fileUri}}
-            pressable
-          />
-          <Text style={[styles.name, {marginVertical: 3}]}>
-            {provider.name}
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Image
-              source={ICONS.rating}
-              style={[styles.rating, {marginRight: 5}]}
+            <View style={{marginVertical: 20}} />
+            <Avatar
+              onPress={onImagePick}
+              customSize
+              size={110}
+              upload
+              source={fileUri && {uri: fileUri}}
+              pressable
             />
-            <Text style={styles.ratingTxt}>
-              {parseFloat(provider.rating).toFixed(1)} out of 5
+            <Text style={[styles.name, {marginVertical: 3}]}>
+              {provider.name}
             </Text>
-          </View>
-          {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
-        </SafeAreaView>
-      </View>
-      <TobTabs.Navigator
-        screenOptions={{
-          tabBarActiveTintColor: COLORS.MAIN_2,
-          tabBarInactiveTintColor: COLORS.MAIN_SUBTEXT,
-          tabBarLabelStyle: styles.label,
-          tabBarIndicatorStyle: {borderColor: COLORS.MAIN_2, borderWidth: 1},
-        }}>
-        <TobTabs.Screen
-          name="profileDetails"
-          component={ProfileDetails}
-          options={{title: 'Profile Details'}}
-        />
-        <TobTabs.Screen
-          name="profileReviews"
-          component={Reviews}
-          options={{title: 'Reviews'}}
-        />
-      </TobTabs.Navigator>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={ICONS.rating}
+                style={[styles.rating, {marginRight: 5}]}
+              />
+              <Text style={styles.ratingTxt}>
+                {parseFloat(provider.rating).toFixed(1)} out of 5
+              </Text>
+            </View>
+            {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
+          </SafeAreaView>
+        </View>
+        <View
+          style={{
+            height: width / 0.8,
+          }}>
+          <TobTabs.Navigator
+            screenOptions={{
+              tabBarActiveTintColor: COLORS.MAIN_2,
+              tabBarInactiveTintColor: COLORS.MAIN_SUBTEXT,
+              tabBarLabelStyle: styles.label,
+              tabBarIndicatorStyle: {
+                borderColor: COLORS.MAIN_2,
+                borderWidth: 1,
+              },
+            }}>
+            <TobTabs.Screen
+              name="profileDetails"
+              component={ProfileDetails}
+              options={{title: 'Profile Details'}}
+            />
+            <TobTabs.Screen
+              name="profileReviews"
+              component={Reviews}
+              options={{title: 'Reviews'}}
+            />
+          </TobTabs.Navigator>
+        </View>
+      </KeyboardAwareScrollView>
     </>
   );
 };
