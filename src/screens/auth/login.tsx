@@ -20,6 +20,9 @@ import auth from '@react-native-firebase/auth';
 import rememberMeAction from '../../redux/action/rememberMeAction';
 import {THIS_VERSION} from '../../constants/version';
 import {getLatestVersion} from '../../api/version';
+//@ts-ignore
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import Toast from 'react-native-toast-message';
 
 export const Login = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -60,6 +63,11 @@ export const Login = ({navigation}: any) => {
   async function verifyLaravelUser(uid: any) {
     const user = await showProviderByFUID(uid);
     if (user.id !== undefined) {
+      Toast.show({
+        type: 'success',
+        text1: 'Auth',
+        text2: 'Logged in successfully',
+      });
       store.dispatch(
         updateCurrentUserAction({
           id: user.id,
@@ -92,6 +100,12 @@ export const Login = ({navigation}: any) => {
       // wait(3000).then(() => {
       //   navigation.navigate('Onboarding Stack');
       // });
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Auth',
+        text2: 'Proper user not found',
+      });
     }
   }
   function disabled() {
@@ -114,9 +128,27 @@ export const Login = ({navigation}: any) => {
 
         if (error.code === 'auth/invalid-email') {
           // setError('The email address is invalid!');
+          Toast.show({
+            type: 'error',
+            text1: 'Auth',
+            text2: 'Invalid Email',
+          });
         }
 
         if (error.code === 'auth/wrong-password') {
+          Toast.show({
+            type: 'error',
+            text1: 'Auth',
+            text2: 'Wrong Password',
+          });
+          //setError('Password is invalid!');
+        }
+        if (error.code === 'auth/user-not-found') {
+          Toast.show({
+            type: 'error',
+            text1: 'Auth',
+            text2: 'User not found',
+          });
           //setError('Password is invalid!');
         }
         console.error(error);
@@ -140,72 +172,78 @@ export const Login = ({navigation}: any) => {
             </FieldNameText>
           )}
         </SafeAreaView>
-        <BottomSheet style={{marginTop: '5%'}}>
-          <View style={{width: '90%', marginVertical: 20}}>
-            <TitleText>Login with</TitleText>
-          </View>
-          <View style={{width: '90%', marginBottom: 20}}>
-            <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
-            <MyTextInputWithIcon
-              placeholder="Enter your mail"
-              autoCapitalize="none"
-              onChangeText={setEmail}
-              value={email}
-              icon={
-                <Icon
-                  name="mail-outline"
-                  size={16}
-                  color={COLORS.MAIN_BODYTEXT}
+        <BottomSheet style={{marginTop: '5%', height: '100%'}}>
+          <KeyboardAwareScrollView style={{width: '100%'}}>
+            <View style={{width: '100%', alignItems: 'center'}}>
+              <View style={{width: '90%', marginVertical: 20}}>
+                <TitleText>Login with</TitleText>
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Enter your mail"
+                  autoCapitalize="none"
+                  onChangeText={setEmail}
+                  value={email}
+                  icon={
+                    <Icon
+                      name="mail-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
                 />
-              }
-            />
-          </View>
-          <View style={{width: '90%', marginBottom: 20}}>
-            <FieldNameText style={{marginBottom: 5}}>Password</FieldNameText>
-            <MyTextInputWithIcon
-              placeholder="Enter your password"
-              secureTextEntry
-              onChangeText={setPassword}
-              autoCapitalize="none"
-              value={password}
-              icon={
-                <Icon
-                  name="lock-closed-outline"
-                  size={16}
-                  color={COLORS.MAIN_BODYTEXT}
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>
+                  Password
+                </FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Enter your password"
+                  secureTextEntry
+                  onChangeText={setPassword}
+                  autoCapitalize="none"
+                  value={password}
+                  icon={
+                    <Icon
+                      name="lock-closed-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
                 />
-              }
-            />
-          </View>
-          <View
-            style={[
-              GlobalStyles.subView,
-              GlobalStyles.row,
-              {marginBottom: 30},
-            ]}>
-            <View style={[GlobalStyles.row, {width: '40%'}]}>
-              <CheckBox value={rememberMe} onChangeVal={setRememberMe} />
-              <FieldNameText>Remember me</FieldNameText>
+              </View>
+              <View
+                style={[
+                  GlobalStyles.subView,
+                  GlobalStyles.row,
+                  {marginBottom: 30},
+                ]}>
+                <View style={[GlobalStyles.row, {width: '40%'}]}>
+                  <CheckBox value={rememberMe} onChangeVal={setRememberMe} />
+                  <FieldNameText>Remember me</FieldNameText>
+                </View>
+                <MainBodyText
+                  onPress={() => navigation.navigate('forget')}
+                  style={{color: 'black'}}>
+                  Forgot password!
+                </MainBodyText>
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <MyButton
+                  title="Login Now"
+                  onPress={onLogin}
+                  loading={loader}
+                  disabled={disabled() || loader}
+                />
+              </View>
+              <View style={[GlobalStyles.row, GlobalStyles.subView]}>
+                <Divider style={{width: '30%'}} />
+                <FieldNameText>Or Sign in with</FieldNameText>
+                <Divider style={{width: '30%'}} />
+              </View>
             </View>
-            <MainBodyText
-              onPress={() => navigation.navigate('forget')}
-              style={{color: 'black'}}>
-              Forgot password!
-            </MainBodyText>
-          </View>
-          <View style={{width: '90%', marginBottom: 20}}>
-            <MyButton
-              title="Login Now"
-              onPress={onLogin}
-              loading={loader}
-              disabled={disabled() || loader}
-            />
-          </View>
-          <View style={[GlobalStyles.row, GlobalStyles.subView]}>
-            <Divider style={{width: '30%'}} />
-            <FieldNameText>Or Sign in with</FieldNameText>
-            <Divider style={{width: '30%'}} />
-          </View>
+          </KeyboardAwareScrollView>
         </BottomSheet>
       </GradientWrapper>
       <View
@@ -220,6 +258,7 @@ export const Login = ({navigation}: any) => {
         </FieldNameText>
         <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
       </View>
+      <Toast position="bottom" />
     </>
   );
 };

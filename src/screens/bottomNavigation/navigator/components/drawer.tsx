@@ -23,67 +23,100 @@ export const Drawer = ({navigation, onClose}: any) => {
   const options = [
     {
       name: 'Home',
-      iconName: 'home-outline',
       onPress: () => {
         navigation.navigate('home');
         onClose();
       },
+      image: {
+        source: ICONS.home,
+        style: {width: 18, height: 20},
+      },
     },
     {
       name: 'History',
-      iconName: 'time-outline',
       onPress: () => {
         navigation.navigate('history');
         onClose();
       },
+      image: {
+        source: ICONS.history,
+        style: {width: 20, height: 18},
+      },
     },
     {
       name: 'Notification',
-      iconName: 'notifications-outline',
       onPress: () => {
         navigation.navigate('notification');
         onClose();
       },
+      image: {
+        source: ICONS.bell,
+        style: {width: 18, height: 20},
+      },
     },
     {
       name: 'My account',
-      iconName: 'person-outline',
       onPress: () => navTo('userAccount'),
+      image: {
+        source: ICONS.account,
+        style: {width: 18, height: 20},
+      },
     },
     {
       name: 'Earnings',
-      iconName: 'wallet-outline',
       onPress: () => navTo('earnings'),
+      image: {
+        source: ICONS.wallet1,
+        style: {width: 20, height: 19},
+      },
     },
     {
       name: 'Documents',
-      iconName: 'documents-outline',
       onPress: () => navTo('documents'),
+      image: {
+        source: ICONS.docs,
+        style: {width: 17.14, height: 20},
+      },
     },
     {
       name: 'Services',
-      iconName: 'apps',
       onPress: () => navTo('services'),
+      image: {
+        source: ICONS.services,
+        style: {width: 19, height: 19},
+      },
     },
     {
       name: 'Language',
-      iconName: 'globe-outline',
       onPress: () => navTo('language'),
+      image: {
+        source: ICONS.language,
+        style: {width: 20, height: 20},
+      },
     },
     {
       name: 'Share & Discount',
-      iconName: 'share-social',
       onPress: () => navTo('referrals'),
+      image: {
+        source: ICONS.share,
+        style: {width: 18.5, height: 20},
+      },
     },
     {
       name: 'Terms & Conditions',
-      iconName: 'book-outline',
       onPress: () => navTo('tos'),
+      image: {
+        source: ICONS.book,
+        style: {width: 20, height: 15},
+      },
     },
     {
       name: 'Privacy Policy',
-      iconName: 'book-outline',
       onPress: () => navTo('privacyPolicy'),
+      image: {
+        source: ICONS.book,
+        style: {width: 20, height: 15},
+      },
     },
   ];
 
@@ -93,6 +126,7 @@ export const Drawer = ({navigation, onClose}: any) => {
         name={item.name}
         iconName={item.iconName}
         onPress={item.onPress}
+        image={item.image}
       />
     );
   };
