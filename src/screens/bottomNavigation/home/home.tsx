@@ -56,6 +56,8 @@ import {generateGreetings} from '../../../helpers/greetings';
 import {MEDIA_URL} from '../../../constants/url';
 import {uploadImage} from '../../../api/uploadImage';
 import {useFocusEffect} from '@react-navigation/native';
+import {PusherConfig} from '../../../config/pusher-config';
+import Pusher from 'pusher-js/react-native';
 
 export const Home = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -87,7 +89,25 @@ export const Home = ({navigation}: any) => {
     getData();
   }, []);
 
+  async function reload() {
+    const pusher = new Pusher(PusherConfig.key, PusherConfig);
+    const chatChannel = pusher.subscribe('requestFor' + state.id);
+    //console.log(chatChannel, 'chat');
+    //console.log(chatChannel, 'Pusher response');
+    chatChannel.bind('pusher:subscription_succeeded', () => {
+      // (3)
+      chatChannel.bind('onNewRequest', (data: any) => {
+        // (4)
+        console.log(data, ' Pusher data');
+        if (data.data.refresh === 'true') {
+          getData();
+        }
+      });
+    });
+  }
+
   async function getData() {
+    reload();
     setLoader(true);
 
     const prov = await getProviderById(state.id).finally(() =>
