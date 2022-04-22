@@ -12,63 +12,78 @@ import {RootStateOrAny, useSelector} from 'react-redux';
 import {getProviderById} from '../../../../api/provider';
 import {MEDIA_URL} from '../../../../constants/url';
 
-export const Drawer = ({navigation}: any) => {
+export const Drawer = ({navigation, onClose}: any) => {
   //const navigation = useNavigation();
+
+  function navTo(screen: any) {
+    navigation.navigate('menu', {screen: screen});
+    onClose();
+  }
+
   const options = [
     {
       name: 'Home',
       iconName: 'home-outline',
-      //onPress: () => navigation.navigate({key: 'hehe'}),
+      onPress: () => {
+        navigation.navigate('home');
+        onClose();
+      },
     },
     {
       name: 'History',
       iconName: 'time-outline',
-      //onPress: () => navigation.navigate(''),
+      onPress: () => {
+        navigation.navigate('history');
+        onClose();
+      },
     },
     {
       name: 'Notification',
       iconName: 'notifications-outline',
-      //onPress: () => navigation.navigate(''),
+      onPress: () => {
+        navigation.navigate('notification');
+        onClose();
+      },
     },
     {
       name: 'My account',
       iconName: 'person-outline',
-      onPress: () => navigation.navigate('userAccount'),
+      onPress: () => navTo('userAccount'),
     },
     {
       name: 'Earnings',
       iconName: 'wallet-outline',
-      onPress: () => navigation.navigate('earnings'),
+      onPress: () => navTo('earnings'),
     },
     {
       name: 'Documents',
       iconName: 'documents-outline',
-      onPress: () => navigation.navigate('documents'),
+      onPress: () => navTo('documents'),
     },
     {
       name: 'Services',
       iconName: 'apps',
-      onPress: () => navigation.navigate('services'),
+      onPress: () => navTo('services'),
     },
     {
       name: 'Language',
       iconName: 'globe-outline',
-      onPress: () => navigation.navigate('language'),
+      onPress: () => navTo('language'),
     },
     {
       name: 'Share & Discount',
       iconName: 'share-social',
-      onPress: () => navigation.navigate('referrals'),
+      onPress: () => navTo('referrals'),
     },
     {
       name: 'Terms & Conditions',
       iconName: 'book-outline',
-      onPress: () => navigation.navigate('tos'),
+      onPress: () => navTo('tos'),
     },
     {
       name: 'Privacy Policy',
       iconName: 'book-outline',
-      onPress: () => navigation.navigate('privacyPolicy'),
+      onPress: () => navTo('privacyPolicy'),
     },
   ];
 
@@ -99,40 +114,39 @@ export const Drawer = ({navigation}: any) => {
   }, []);
 
   return (
-    <View style={{flex: 1, flexDirection: 'row'}}>
-      <View style={{width: '20%', backgroundColor: COLORS.WF2}} />
-      <SafeAreaView style={[styles.main, styles.elevated_card]}>
-        <Avatar customSize size={70} source={avatar && {uri: avatar}} />
-        <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
-        <View style={styles.ratingCont}>
-          <Image
-            style={[styles.rating, {marginRight: 5}]}
-            source={ICONS.rating}
-          />
-          <Text style={styles.ratingTxt}>
-            {parseFloat(user.rating).toFixed(1)} out of 5
-          </Text>
+    <SafeAreaView style={[styles.main, styles.elevated_card]}>
+      <Avatar customSize size={70} source={avatar && {uri: avatar}} />
+      <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
+      <View style={styles.ratingCont}>
+        <Image
+          style={[styles.rating, {marginRight: 5}]}
+          source={ICONS.rating}
+        />
+        <Text style={styles.ratingTxt}>
+          {parseFloat(user.rating).toFixed(1)} out of 5
+        </Text>
+      </View>
+      <Divider />
+      <ScrollableView>
+        <View style={{width: '80%', marginTop: 10}}>
+          {options.map(renderOptions)}
         </View>
-        <Divider />
-        <ScrollableView>
-          <View style={{width: '80%', marginTop: 10}}>
-            {options.map(renderOptions)}
-          </View>
-          <View style={{width: '80%', marginTop: 20}}>
-            <DrawerOption name="Log-out" iconName="log-out-outline" />
-          </View>
-        </ScrollableView>
-      </SafeAreaView>
-    </View>
+        <View style={{width: '80%', marginTop: 20}}>
+          <DrawerOption name="Log-out" iconName="log-out-outline" />
+        </View>
+      </ScrollableView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    //flex: 1,
+    // flex: 1,
     alignItems: 'center',
-    width: '80%',
-    alignSelf: 'flex-end',
+    width: '100%',
+    justifyContent: 'flex-end',
+    height: '100%',
+    marginTop: 15,
   },
   name: {
     fontFamily: FONTS.P_SEMIBOLD,

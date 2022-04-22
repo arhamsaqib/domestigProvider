@@ -90,13 +90,8 @@ export const ProfileDetails = () => {
   async function findPlace(place: string) {
     const res = await findPlaceByText(place);
     console.log(res, 'Place by text');
-    if (res[0] === undefined) {
-      Alert.alert('Error while parsing place');
-      //setLocation('');
-      setPlaceInfo(res.candidates[0]);
-    } else {
-      setPlaceInfo(res.candidates[0]);
-    }
+
+    setPlaceInfo(res.candidates[0]);
   }
   function onSelect(item: any) {
     //console.log(item, 'Selected Item');

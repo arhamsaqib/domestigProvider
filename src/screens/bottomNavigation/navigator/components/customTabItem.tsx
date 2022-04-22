@@ -1,10 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../../../constants/colors';
 import {FONTS} from '../../../../constants/fonts';
-import {Drawer} from './drawer';
-import {DrawerModal} from './drawerModal';
 
 interface Props {
   focused?: boolean;
@@ -14,20 +12,17 @@ interface Props {
   iconName: string;
 }
 
-export const DrawerOpener = (props: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const CustomerTabItem = (props: Props) => {
   const {navigation} = props;
   const nav = navigation.navigation;
   const route = navigation.route;
   const isFocused = nav.isFocused();
-  // useEffect(() => {
-  //   !isFocused && setIsOpen(false);
-  // }, []);
+
   return (
     <>
       <TouchableOpacity
-        onPress={() => setIsOpen(!isOpen)}
-        // onPress={() => nav.navigate(route.name)}
+        onPress={() => nav.navigate(route.name)}
+        // onPress={() => props.navigation.goBack()}
         style={[
           styles.main,
           isFocused && styles.focused,
@@ -49,11 +44,6 @@ export const DrawerOpener = (props: Props) => {
           </Text>
         )}
       </TouchableOpacity>
-      <DrawerModal
-        modalVisibility={isOpen}
-        onOutsidePress={() => setIsOpen(false)}>
-        <Drawer navigation={nav} onClose={() => setIsOpen(false)} />
-      </DrawerModal>
     </>
   );
 };
@@ -61,12 +51,13 @@ export const DrawerOpener = (props: Props) => {
 const styles = StyleSheet.create({
   main: {
     flexDirection: 'row',
-    width: 40,
+    minWidth: 40,
     justifyContent: 'center',
     alignItems: 'center',
     height: 35,
     alignSelf: 'center',
     borderRadius: 5,
+    paddingHorizontal: 2,
   },
   tabBarLabelStyle: {
     fontFamily: FONTS.P_MEDIUM,
