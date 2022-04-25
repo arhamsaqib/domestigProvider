@@ -19,7 +19,7 @@ export const BeforeWorkImage = (props: Props) => {
   async function openGallery() {
     ImagePicker.openPicker({
       mediaType: 'photo',
-      includeBase64: true,
+      compressImageQuality: 0.5,
     }).then(image => {
       //console.log(image);
       setImage(image);

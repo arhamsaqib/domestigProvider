@@ -45,6 +45,7 @@ export const BottomCard: FunctionComponent<ModalView> = ({
         )}
         <View style={[styles.modalView2, style]}>
           <TouchableOpacity
+            onPress={onOutsidePress}
             style={{
               width: '90%',
               alignItems: 'center',

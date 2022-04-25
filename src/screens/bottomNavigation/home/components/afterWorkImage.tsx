@@ -19,6 +19,7 @@ export const AfterWorkImage = (props: Props) => {
   async function openGallery() {
     ImagePicker.openPicker({
       mediaType: 'photo',
+      compressImageQuality: 0.5,
       //includeBase64: true,
     }).then(image => {
       console.log(image);

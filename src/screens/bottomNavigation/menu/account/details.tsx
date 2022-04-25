@@ -48,7 +48,9 @@ export const ProfileDetails = () => {
     }
   }
   async function onImagePick() {
-    let result: any = await ImageCropPicker.openPicker({});
+    let result: any = await ImageCropPicker.openPicker({
+      compressImageQuality: 0.5,
+    });
     // console.log(result, 'Image picked');
     if (!result.cancelled) {
       setFileUri(result.path.toString());

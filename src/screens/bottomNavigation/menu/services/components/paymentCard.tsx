@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {showProviderServicesByCategoryName} from '../../../../../api/providerServices';
 import {CustomSwitch} from '../../../../../components/customSwitch';
@@ -47,12 +47,12 @@ export const PaymentCard = (props: Props) => {
             <Text style={styles.time}>{data.rate}/h</Text>
           </View>
         )}
-        <TouchableOpacity onPress={props.onEditPress}>
+        <View>
           <Image
             source={ICONS.pencil}
             style={[styles.pencil, {marginLeft: 5}]}
           />
-        </TouchableOpacity>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
-    //borderWidth: 1,
+    // borderWidth: 1,
     backgroundColor: 'white',
     height: 71,
     padding: 10,

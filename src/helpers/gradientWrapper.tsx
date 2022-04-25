@@ -7,6 +7,8 @@ interface Props {
   children?: any;
   style?: StyleProp<ViewStyle>;
 }
+//@ts-ignore
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 
 export const GradientWrapper = (props: Props) => {
   const {children, style} = props;
@@ -14,10 +16,11 @@ export const GradientWrapper = (props: Props) => {
     <LinearGradient
       colors={[COLORS.MAIN_1, COLORS.WHITE]}
       style={[styles.main, props.style]}>
-      {children}
-      {/* <ScrollView style={[{width: '100%'}, props.style]}>
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        style={{width: '100%', alignSelf: 'center', borderWidth: 1, flex: 0.8}}>
         <View style={{width: '100%', alignItems: 'center'}}>{children}</View>
-      </ScrollView> */}
+      </KeyboardAwareScrollView>
     </LinearGradient>
   );
 };
