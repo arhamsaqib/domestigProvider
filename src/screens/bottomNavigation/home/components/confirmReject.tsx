@@ -14,7 +14,7 @@ interface Props {
 export const ConfirmRejectRequest = (props: Props) => {
   return (
     <BottomCard
-      style={{height: '25%', alignItems: 'center'}}
+      style={{minHeight: '25%', alignItems: 'center'}}
       modalVisibility={props.modalVisibility}
       onOutsidePress={props.onOutisdePress}>
       <PageNameText style={{marginVertical: 10}}>

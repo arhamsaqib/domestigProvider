@@ -27,7 +27,7 @@ export const BeforeWorkImage = (props: Props) => {
   }
   return (
     <BottomCard
-      style={{height: '35%', alignItems: 'center'}}
+      style={{minHeight: '35%', alignItems: 'center'}}
       modalVisibility={props.modalVisibility}
       onOutsidePress={props.onOutisdePress}>
       <PageNameText style={{marginVertical: 10}}>

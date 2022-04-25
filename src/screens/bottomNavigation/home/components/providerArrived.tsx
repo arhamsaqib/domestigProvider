@@ -46,7 +46,7 @@ export const ProviderArrived = (props: Props) => {
     <>
       <View style={styles.timeCont}></View>
       <BottomCard
-        style={{height: '35%', alignItems: 'center'}}
+        style={{minHeight: '35%', alignItems: 'center'}}
         modalVisibility={props.modalVisibility}
         onOutsidePress={props.onOutisdePress}>
         <ScrollableView>
