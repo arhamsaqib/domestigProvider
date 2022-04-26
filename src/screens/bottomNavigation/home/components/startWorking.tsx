@@ -31,9 +31,9 @@ export const PausePlay = (props: {state?: boolean; onPress?(): void}) => {
         marginLeft: 10,
       }}>
       {props.state ? (
-        <Icon name="pause-outline" size={15} />
+        <Icon name="pause-outline" size={15} color="black" />
       ) : (
-        <Icon name="play-outline" size={15} />
+        <Icon name="play-outline" size={15} color={'black'} />
       )}
     </TouchableOpacity>
   );

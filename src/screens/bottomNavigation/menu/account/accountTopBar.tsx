@@ -28,10 +28,14 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 const TobTabs = createMaterialTopTabNavigator();
 
 export const AccountTopBar = ({navigation}: any) => {
+  var width = Dimensions.get('screen').width;
+  var height = Dimensions.get('screen').height;
+
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
   const [loader, setLoader] = useState(false);
   const [fileUri, setFileUri]: any = useState(null);
   const [provider, setProvider]: any = useState([]);
+  const [h, sH]: any = useState(height);
   async function onImagePick() {
     let result: any = await ImageCropPicker.openPicker({
       compressImageQuality: 0.5,
@@ -60,11 +64,10 @@ export const AccountTopBar = ({navigation}: any) => {
   useEffect(() => {
     getData();
   }, []);
-  var width = Dimensions.get('screen').width;
-  var height = Dimensions.get('screen').height;
+
   return (
     <>
-      <KeyboardAwareScrollView style={{flex: 0}}>
+      <KeyboardAwareScrollView>
         <View style={styles.card}>
           <SafeAreaView
             style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
@@ -109,7 +112,7 @@ export const AccountTopBar = ({navigation}: any) => {
         </View>
         <View
           style={{
-            height: width / 0.5,
+            height: height + height,
           }}>
           <TobTabs.Navigator
             screenOptions={{

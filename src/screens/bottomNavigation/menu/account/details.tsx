@@ -21,7 +21,11 @@ import {FlatList} from 'react-native-gesture-handler';
 import {CountriesOptions} from '../../../../components/countriesOptions';
 import {FieldNameText} from '../../../../components/texts/fieldNameText';
 import {MultipleOptions} from '../../../../components/multipleOptions';
-import {findPlaceByText, placeAutocomplete} from '../../../../api/places';
+import {
+  findPlaceById,
+  findPlaceByText,
+  placeAutocomplete,
+} from '../../../../api/places';
 
 export const ProfileDetails = () => {
   const [user, setUser]: any = useState([]);
@@ -90,14 +94,14 @@ export const ProfileDetails = () => {
   }
 
   async function findPlace(place: string) {
-    const res = await findPlaceByText(place);
+    const res = await findPlaceById(place);
     console.log(res, 'Place by text');
 
-    setPlaceInfo(res.candidates[0]);
+    setPlaceInfo(res.result);
   }
   function onSelect(item: any) {
     //console.log(item, 'Selected Item');
-    setLocation(item.description);
+    setLocation(item.place_id);
     setShowPlaces(false);
     findPlace(item.description);
   }
@@ -117,7 +121,7 @@ export const ProfileDetails = () => {
     getData();
   }
   return (
-    <View style={GlobalStyles.screenMain}>
+    <View style={[GlobalStyles.screenMain]}>
       <View style={{width: '90%', marginTop: 20}}>
         <Text style={[styles.field, {marginBottom: 5}]}>Name</Text>
         <MyTextInputWithIcon
@@ -199,6 +203,7 @@ export const ProfileDetails = () => {
             data={gallery}
             numColumns={3}
             renderItem={renderGallery}
+            scrollEnabled={false}
           />
         </View>
       </View>

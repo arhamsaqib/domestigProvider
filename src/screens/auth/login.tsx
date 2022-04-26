@@ -111,7 +111,7 @@ export const Login = ({navigation}: any) => {
       .then(userCredential => {
         setLoader(false);
         const uid = userCredential.user.uid;
-        userCredential.user.sendEmailVerification();
+        //userCredential.user.sendEmailVerification();
         verifyLaravelUser(uid);
         //console.log('User account created & signed in!');
       })
