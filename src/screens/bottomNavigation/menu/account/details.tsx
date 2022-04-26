@@ -118,7 +118,6 @@ export const ProfileDetails = () => {
   }
   return (
     <View style={GlobalStyles.screenMain}>
-      {/* <ScrollableView> */}
       <View style={{width: '90%', marginTop: 20}}>
         <Text style={[styles.field, {marginBottom: 5}]}>Name</Text>
         <MyTextInputWithIcon
@@ -141,21 +140,6 @@ export const ProfileDetails = () => {
           icon={<Icon name="call-outline" size={15} color={'#777777'} />}
         />
       </View>
-      {/* <View style={{width: '90%', marginTop: 10}}>
-          <Text style={[styles.field, {marginBottom: 5}]}>Country</Text>
-          <DropDown
-            name={user.country ?? 'Select your country'}
-            //value={user.country}
-            icon={<Icon name="globe-outline" size={15} color={'#777777'} />}
-          />
-        </View>
-        <View style={{width: '90%', marginTop: 10}}>
-          <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>
-          <DropDown
-            name={user.location ?? 'Type your location'}
-            icon={<Icon name="location-outline" size={15} color={'#777777'} />}
-          />
-        </View> */}
       <View style={{width: '90%', marginBottom: 20}}>
         <FieldNameText style={{marginBottom: 5}}>Country</FieldNameText>
         <MyTextInputWithIcon
@@ -221,7 +205,6 @@ export const ProfileDetails = () => {
       <View style={{width: '90%', marginTop: 20}}>
         <MyButton title="Save changes" onPress={onSavePress} loading={loader} />
       </View>
-      {/* </ScrollableView> */}
     </View>
   );
 };

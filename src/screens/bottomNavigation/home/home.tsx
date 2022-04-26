@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  Linking,
   RefreshControl,
   SafeAreaView,
   StyleSheet,
@@ -84,6 +85,7 @@ export const Home = ({navigation}: any) => {
   const [timeStart, setTimeStart]: any = useState();
   const [extraWork, setExtraWork]: any = useState(false);
   const [timer, setTimer] = useState(false);
+  const [modelToShow, setModelToShow]: any = useState('');
 
   useEffect(() => {
     getData();
@@ -92,8 +94,6 @@ export const Home = ({navigation}: any) => {
   async function reload() {
     const pusher = new Pusher(PusherConfig.key, PusherConfig);
     const chatChannel = pusher.subscribe('requestFor' + state.id);
-    //console.log(chatChannel, 'chat');
-    //console.log(chatChannel, 'Pusher response');
     chatChannel.bind('pusher:subscription_succeeded', () => {
       // (3)
       chatChannel.bind('onNewRequest', (data: any) => {
@@ -140,8 +140,10 @@ export const Home = ({navigation}: any) => {
       }
       if (res1.verified === 'true') {
         setProviderArrived(true);
+        //setModelToShow('providerArrived');
       } else {
         setWaitingProvider(true);
+        //setModelToShow('waitingProvider');
       }
     }
     const submission = await showBookingSubmissionByPIDnBID({
@@ -165,6 +167,7 @@ export const Home = ({navigation}: any) => {
       if (submission.before_work_image.length > 10) {
         setProviderArrived(false);
         setStartWorking(true);
+        // setModelToShow('startWorking');
       }
     }
   }
@@ -264,7 +267,7 @@ export const Home = ({navigation}: any) => {
   }
   async function onBeforeImageSubmit(image: any) {
     //console.log(image, 'Image data');
-
+    setLoader(true);
     const img: any = await uploadImage(image);
 
     if (img.id !== undefined) {
@@ -275,7 +278,9 @@ export const Home = ({navigation}: any) => {
         before_work_image: img.uri,
         time_taken: '00:00:00',
       };
-      const res = await createBookingSubmission(data);
+      const res = await createBookingSubmission(data).finally(() =>
+        setLoader(false),
+      );
       console.log(res);
     }
 
@@ -308,6 +313,8 @@ export const Home = ({navigation}: any) => {
   }
   async function onAfterImageSubmit(image: any) {
     //console.log(image, 'Image data');
+    setLoader(true);
+
     const img: any = await uploadImage(image);
     if (img.id !== undefined) {
       const data = {
@@ -317,7 +324,10 @@ export const Home = ({navigation}: any) => {
         after_work_image: img.uri,
         time_taken: timeTaken,
       };
-      const res = await updateBookingSubmission(inProgressBooking.id, data);
+      const res = await updateBookingSubmission(
+        inProgressBooking.id,
+        data,
+      ).finally(() => setLoader(false));
       console.log(res);
     }
     const notifications = generateAfterWorkImageSubmitNotification({
@@ -534,14 +544,17 @@ export const Home = ({navigation}: any) => {
       <BeforeWorkImage
         modalVisibility={beforeModel}
         onSubmitPress={onBeforeImageSubmit}
+        loader={loader}
       />
       <AfterWorkImage
         modalVisibility={afterModel}
         onSubmitPress={onAfterImageSubmit}
+        loader={loader}
       />
       <ExtraCharge
         modalVisibility={extraWork}
         onSubmitNow={onSubmitExtraCharge}
+        onNoPress={() => onSubmitExtraCharge('0', 'none')}
       />
       <StartWorking
         modalVisibility={startWorking}
@@ -564,6 +577,7 @@ export const Home = ({navigation}: any) => {
             customer_details: customer,
           });
         }}
+        onCallPress={() => Linking.openURL(`tel:${customer.phone}`)}
       />
     </SafeAreaView>
   );

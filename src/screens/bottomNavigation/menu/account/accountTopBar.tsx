@@ -109,7 +109,7 @@ export const AccountTopBar = ({navigation}: any) => {
         </View>
         <View
           style={{
-            height: width / 0.8,
+            height: width / 0.5,
           }}>
           <TobTabs.Navigator
             screenOptions={{

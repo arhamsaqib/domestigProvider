@@ -22,20 +22,9 @@ interface Props {
 
 export const WaitingProvider = (props: Props) => {
   const {customer} = props;
-  // const [customer, setCustomer]: any = useState([]);
-  // async function getData() {
-  //   const res = await getCustomerById(props.data.customer_id);
-
-  //   if (res !== undefined) {
-  //     setCustomer(res);
-  //   }
-  // }
-  // useEffect(() => {
-  //   getData();
-  // }, []);
   return (
     <BottomCard
-      style={{height: '35%', alignItems: 'center'}}
+      style={{minHeight: '35%', alignItems: 'center'}}
       modalVisibility={props.modalVisibility}
       onOutsidePress={props.onOutisdePress}>
       <ScrollableView>

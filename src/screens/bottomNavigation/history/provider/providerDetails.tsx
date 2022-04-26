@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ProviderReviews} from './providerReviews';
 import {BottomCard} from '../../../../components/bottomCard';
@@ -10,6 +10,8 @@ import {COLORS} from '../../../../constants/colors';
 import {ICONS} from '../../../../constants/icons';
 import {MEDIA_URL} from '../../../../constants/url';
 import {parse} from '@babel/core';
+//@ts-ignore
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 
 const TobTabs = createMaterialTopTabNavigator();
 
@@ -20,55 +22,67 @@ interface Props {
 }
 
 export const ProviderDetails = (props: Props) => {
+  var width = Dimensions.get('screen').width;
+
   return (
     <BottomCard
       style={{height: '80%'}}
       onOutsidePress={props.onOutsidePress}
       modalVisibility={props.modalVisibility}>
-      <View style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
-        <Avatar
-          customSize
-          source={props.data.avatar && {uri: MEDIA_URL + props.data.avatar}}
-          size={80}
-          verified
-        />
-        <Text style={[styles.name, {marginVertical: 3}]}>
-          {props.data.name}
-        </Text>
+      <KeyboardAwareScrollView style={{flex: 0}}>
+        <View style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
+          <Avatar
+            customSize
+            source={props.data.avatar && {uri: MEDIA_URL + props.data.avatar}}
+            size={80}
+            verified
+          />
+          <Text style={[styles.name, {marginVertical: 3}]}>
+            {props.data.name}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={ICONS.rating}
+              style={[styles.rating, {marginRight: 5}]}
+            />
+            <Text style={styles.ratingTxt}>
+              {parseFloat(props.data.rating).toFixed(1)} out of 5
+            </Text>
+          </View>
+        </View>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            height: width / 0.5,
           }}>
-          <Image
-            source={ICONS.rating}
-            style={[styles.rating, {marginRight: 5}]}
-          />
-          <Text style={styles.ratingTxt}>
-            {parseFloat(props.data.rating).toFixed(1)} out of 5
-          </Text>
+          <TobTabs.Navigator
+            screenOptions={{
+              tabBarActiveTintColor: COLORS.MAIN_2,
+              tabBarInactiveTintColor: COLORS.MAIN_SUBTEXT,
+              tabBarLabelStyle: styles.label,
+              tabBarIndicatorStyle: {
+                borderColor: COLORS.MAIN_2,
+                borderWidth: 1,
+              },
+            }}>
+            <TobTabs.Screen
+              name="providerDetails"
+              component={ProviderProfileDetails}
+              options={{title: 'Profile Details'}}
+              initialParams={{user: props.data}}
+            />
+            <TobTabs.Screen
+              name="providerReviews"
+              component={ProviderReviews}
+              options={{title: 'Reviews'}}
+              initialParams={{user: props.data}}
+            />
+          </TobTabs.Navigator>
         </View>
-      </View>
-      <TobTabs.Navigator
-        screenOptions={{
-          tabBarActiveTintColor: COLORS.MAIN_2,
-          tabBarInactiveTintColor: COLORS.MAIN_SUBTEXT,
-          tabBarLabelStyle: styles.label,
-          tabBarIndicatorStyle: {borderColor: COLORS.MAIN_2, borderWidth: 1},
-        }}>
-        <TobTabs.Screen
-          name="providerDetails"
-          component={ProviderProfileDetails}
-          options={{title: 'Profile Details'}}
-          initialParams={{user: props.data}}
-        />
-        <TobTabs.Screen
-          name="providerReviews"
-          component={ProviderReviews}
-          options={{title: 'Reviews'}}
-          initialParams={{user: props.data}}
-        />
-      </TobTabs.Navigator>
+      </KeyboardAwareScrollView>
     </BottomCard>
   );
 };

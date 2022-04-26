@@ -46,6 +46,7 @@ interface Props {
   onCompleteWork?(): void;
   providerId: string;
   onMessagePress?(): void;
+  onCallPress?(): void;
 
   timer?: boolean;
   onToggleTimer?(): void;
@@ -119,7 +120,7 @@ export const StartWorking = (props: Props) => {
                 alignSelf: 'flex-end',
               }}>
               <TouchableOpacity
-                // onPress={props.onMessagePress}
+                onPress={props.onCallPress}
                 style={[styles.messageCont, {}]}>
                 <Icon name="call-outline" size={30} color={COLORS.MAIN_1} />
               </TouchableOpacity>

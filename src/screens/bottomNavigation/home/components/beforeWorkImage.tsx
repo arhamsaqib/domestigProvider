@@ -12,6 +12,7 @@ interface Props {
   onOutisdePress?(): void;
   modalVisibility: boolean;
   onSubmitPress(image: any): void;
+  loader?: boolean;
 }
 
 export const BeforeWorkImage = (props: Props) => {
@@ -51,6 +52,7 @@ export const BeforeWorkImage = (props: Props) => {
         <MyButton
           title="Submit Now"
           onPress={() => props.onSubmitPress(image)}
+          loading={props.loader}
         />
       </View>
     </BottomCard>

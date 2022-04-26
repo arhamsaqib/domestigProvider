@@ -49,6 +49,7 @@ const MainBottomNav = () => {
               iconName="home-outline"
             />
           ),
+          unmountOnBlur: true,
         })}
       />
       <BottomNav.Screen
