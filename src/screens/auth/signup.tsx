@@ -16,7 +16,11 @@ import {createProvider} from '../../api/provider';
 import updateCurrentUserAction from '../../redux/action/currectUserAction';
 import {useStore} from 'react-redux';
 import {MultipleOptions} from '../../components/multipleOptions';
-import {findPlaceByText, placeAutocomplete} from '../../api/places';
+import {
+  findPlaceById,
+  findPlaceByText,
+  placeAutocomplete,
+} from '../../api/places';
 import {CountriesOptions} from '../../components/countriesOptions';
 
 export const Signup = ({navigation}: any) => {
@@ -81,6 +85,7 @@ export const Signup = ({navigation}: any) => {
   async function onRegister() {
     setLoader(true);
     setError('');
+
     if (CheckSameString(password, confirmPassword)) {
       auth()
         .createUserWithEmailAndPassword(email, password)
@@ -110,17 +115,18 @@ export const Signup = ({navigation}: any) => {
   }
 
   async function findPlace(place: string) {
-    const res = await findPlaceByText(place);
-    console.log(res, 'Place by text');
+    const res = await findPlaceById(place);
+    console.log(res, 'Place by id');
 
-    setPlaceInfo(res.candidates[0]);
+    setPlaceInfo(res.result);
   }
 
   function onSelect(item: any) {
     //console.log(item, 'Selected Item');
     setLocation(item.description);
     setShowPlaces(false);
-    findPlace(item.description);
+    //findPlace(item.description); //send place_id instead
+    findPlace(item.place_id);
   }
   return (
     <>
