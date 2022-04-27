@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {Dimensions, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS} from '../constants/colors';
 
@@ -12,16 +12,28 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 
 export const GradientWrapper = (props: Props) => {
   const {children, style} = props;
+  const height = Dimensions.get('screen').height;
   return (
-    <LinearGradient
-      colors={[COLORS.MAIN_1, COLORS.WHITE]}
-      style={[styles.main, props.style]}>
-      <KeyboardAwareScrollView
-        enableOnAndroid
-        style={{width: '100%', alignSelf: 'center', flex: 1}}>
+    // <LinearGradient
+    //   colors={[COLORS.MAIN_1, COLORS.WHITE]}
+
+    //   style={[styles.main, props.style]}>
+    //   <KeyboardAwareScrollView
+    //     enableOnAndroid
+    //     style={{width: '100%', alignSelf: 'center', flex: 1}}>
+    //     <View style={{width: '100%', alignItems: 'center'}}>{children}</View>
+    //   </KeyboardAwareScrollView>
+    // </LinearGradient>
+    <KeyboardAwareScrollView
+      enableOnAndroid
+      contentContainerStyle={{backgroundColor: 'white', height: height * 2}}
+      style={{width: '100%', alignSelf: 'center'}}>
+      <LinearGradient
+        colors={[COLORS.MAIN_1, COLORS.WHITE]}
+        style={[styles.main, props.style]}>
         <View style={{width: '100%', alignItems: 'center'}}>{children}</View>
-      </KeyboardAwareScrollView>
-    </LinearGradient>
+      </LinearGradient>
+    </KeyboardAwareScrollView>
   );
 };
 

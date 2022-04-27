@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -24,6 +25,7 @@ import {getProviderById, updateProvider} from '../../../../api/provider';
 import {MEDIA_URL} from '../../../../constants/url';
 //@ts-ignore
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import auth from '@react-native-firebase/auth';
 
 const TobTabs = createMaterialTopTabNavigator();
 
@@ -35,7 +37,6 @@ export const AccountTopBar = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
   const [fileUri, setFileUri]: any = useState(null);
   const [provider, setProvider]: any = useState([]);
-  const [h, sH]: any = useState(height);
   async function onImagePick() {
     let result: any = await ImageCropPicker.openPicker({
       compressImageQuality: 0.5,
@@ -65,6 +66,15 @@ export const AccountTopBar = ({navigation}: any) => {
     getData();
   }, []);
 
+  async function onLogout() {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        navigation.navigate('auth');
+      });
+  }
+
   return (
     <>
       <KeyboardAwareScrollView>
@@ -73,14 +83,16 @@ export const AccountTopBar = ({navigation}: any) => {
             style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
             <View style={styles.row}>
               <BackIcon black onPress={() => navigation.goBack()} />
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity
+                onPress={onLogout}
+                style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Icon
                   name="log-out-outline"
                   size={20}
                   color={COLORS.MAIN_SUBTEXT}
                 />
                 <Text style={[styles.log, {marginLeft: 5}]}>Log-out</Text>
-              </View>
+              </TouchableOpacity>
             </View>
             <View style={{marginVertical: 20}} />
             <Avatar

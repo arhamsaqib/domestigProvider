@@ -3,6 +3,7 @@ import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import {markAllNotificationsRead} from '../../../api/customerNotifications';
 import {
   getProviderNotifications,
   updateProviderNotification,
@@ -50,6 +51,11 @@ export const Notification = () => {
     );
   }
 
+  async function markAllRead() {
+    const res = await markAllNotificationsRead(state.id);
+    getData();
+  }
+
   useEffect(() => {
     getData();
   }, []);
@@ -85,7 +91,7 @@ export const Notification = () => {
           justifyContent: 'space-between',
         }}>
         <PageNameText>Notifications</PageNameText>
-        <Text onPress={() => {}} style={styles.optionText}>
+        <Text onPress={markAllRead} style={styles.optionText}>
           Mark all as read
         </Text>
       </View>

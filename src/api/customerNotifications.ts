@@ -19,3 +19,8 @@ export async function getCustomerNotifications(id: string) {
   const res = await get(endpoint + '/' + id);
   return res;
 }
+export async function markAllNotificationsRead(id: string) {
+  const endp = 'provider-mark-read-notifications';
+  const res = await get(endp + '/' + id);
+  return res;
+}

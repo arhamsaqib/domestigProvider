@@ -164,7 +164,7 @@ export const Chat = ({route, navigation}: any) => {
           }}
           renderAvatar={() => null}
           user={{
-            _id: cid,
+            _id: pid,
           }}
         />
       </SafeAreaView>

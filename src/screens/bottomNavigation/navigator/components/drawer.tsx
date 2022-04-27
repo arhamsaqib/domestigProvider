@@ -11,6 +11,7 @@ import {ScrollableView} from '../../../../helpers/scrollableView';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getProviderById} from '../../../../api/provider';
 import {MEDIA_URL} from '../../../../constants/url';
+import auth from '@react-native-firebase/auth';
 
 export const Drawer = ({navigation, onClose}: any) => {
   //const navigation = useNavigation();
@@ -147,6 +148,15 @@ export const Drawer = ({navigation, onClose}: any) => {
     getData();
   }, []);
 
+  async function onLogout() {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        navigation.navigate('auth');
+      });
+  }
+
   return (
     <SafeAreaView style={[styles.main, styles.elevated_card]}>
       <Avatar customSize size={70} source={avatar && {uri: avatar}} />
@@ -166,7 +176,11 @@ export const Drawer = ({navigation, onClose}: any) => {
           {options.map(renderOptions)}
         </View>
         <View style={{width: '80%', marginTop: 20}}>
-          <DrawerOption name="Log-out" iconName="log-out-outline" />
+          <DrawerOption
+            name="Log-out"
+            iconName="log-out-outline"
+            onPress={onLogout}
+          />
         </View>
       </ScrollableView>
     </SafeAreaView>
