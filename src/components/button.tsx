@@ -34,9 +34,14 @@ export const MyButton = (props: Props) => {
   } = props;
   return (
     <TouchableOpacity
-      disabled={loading ?? disabled}
+      disabled={disabled}
       {...rest}
-      style={[styles.main, secondary && styles.btnSecondary, style]}>
+      style={[
+        styles.main,
+        secondary && styles.btnSecondary,
+        style,
+        disabled && {backgroundColor: COLORS.MAIN_BODYTEXT},
+      ]}>
       {!loading && (
         <>
           <Text

@@ -20,10 +20,7 @@ import auth from '@react-native-firebase/auth';
 import rememberMeAction from '../../redux/action/rememberMeAction';
 import {THIS_VERSION} from '../../constants/version';
 import {getLatestVersion} from '../../api/version';
-//@ts-ignore
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import Toast from 'react-native-toast-message';
-import {ScrollableView} from '../../helpers/scrollableView';
 
 export const Login = ({navigation}: any) => {
   const [email, setEmail] = useState('');

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BottomSheet} from '../../components/bottomSheet';
 import {MyTextInputWithIcon} from '../../components/textinputwithicon';
 import {FieldNameText} from '../../components/texts/fieldNameText';
@@ -9,19 +9,15 @@ import {GradientWrapper} from '../../helpers/gradientWrapper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../constants/colors';
 import {MyButton} from '../../components/button';
-import {ScrollableView} from '../../helpers/scrollableView';
 import {CheckSameString} from '../../helpers/checkSameString';
 import auth from '@react-native-firebase/auth';
 import {createProvider} from '../../api/provider';
 import updateCurrentUserAction from '../../redux/action/currectUserAction';
 import {useStore} from 'react-redux';
 import {MultipleOptions} from '../../components/multipleOptions';
-import {
-  findPlaceById,
-  findPlaceByText,
-  placeAutocomplete,
-} from '../../api/places';
+import {findPlaceById, placeAutocomplete} from '../../api/places';
 import {CountriesOptions} from '../../components/countriesOptions';
+import Toast from 'react-native-toast-message';
 
 export const Signup = ({navigation}: any) => {
   const [name, setName]: any = useState('');
@@ -44,7 +40,9 @@ export const Signup = ({navigation}: any) => {
       email.length < 8 ||
       password.length < 8 ||
       confirmPassword.length < 8 ||
-      name.length < 2
+      name.length < 2 ||
+      country.length < 1 ||
+      location.length < 5
     );
   }
   async function createLaravelUser(uid: string) {
@@ -85,7 +83,6 @@ export const Signup = ({navigation}: any) => {
   async function onRegister() {
     setLoader(true);
     setError('');
-
     if (CheckSameString(password, confirmPassword)) {
       auth()
         .createUserWithEmailAndPassword(email, password)
@@ -96,19 +93,32 @@ export const Signup = ({navigation}: any) => {
         .catch((error: any) => {
           if (error.code === 'auth/email-already-in-use') {
             setLoader(false);
-            setError('That email address is already in use!');
+            Toast.show({
+              type: 'error',
+              text1: 'Registration',
+              text2: 'Email already in use',
+            });
           }
           if (error.code === 'auth/invalid-email') {
             setLoader(false);
-            setError('That email address is invalid!');
+            Toast.show({
+              type: 'error',
+              text1: 'Registration',
+              text2: 'Invalid Email',
+            });
           }
           //console.error(error);
         });
     } else {
       setLoader(false);
-      setError('Passwords do not match');
+      Toast.show({
+        type: 'error',
+        text1: 'Password',
+        text2: 'Passwords do not match',
+      });
     }
   }
+
   async function findLocation(str: string) {
     const res = await placeAutocomplete(str);
     setPlace(res);
@@ -288,6 +298,7 @@ export const Signup = ({navigation}: any) => {
           </FieldNameText>
         </FieldNameText>
       </View> */}
+      <Toast position="bottom" />
     </>
   );
 };
