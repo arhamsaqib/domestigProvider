@@ -103,7 +103,6 @@ export const Services = ({navigation}: any) => {
         <View style={{width: '90%', alignItems: 'center', marginLeft: '-15%'}}>
           <PageNameText>Services</PageNameText>
         </View>
-        §
       </View>
       {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
       <View style={{width: '90%', marginTop: 10}}>

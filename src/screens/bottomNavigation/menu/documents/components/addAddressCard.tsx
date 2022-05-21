@@ -31,6 +31,7 @@ export const AddDocumentModal = (props: Props) => {
     ImagePicker.openPicker({
       mediaType: 'photo',
       // includeBase64: true,
+      compressImageQuality: 0.7,
     }).then(image => {
       //console.log(image);
       setImage(image);
