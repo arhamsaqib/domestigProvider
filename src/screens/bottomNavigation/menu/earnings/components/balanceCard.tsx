@@ -29,7 +29,7 @@ export const BalanceCard = (props: Props) => {
           {props.earnings && ' Earning'}
           {props.withdraw && ' Withdrawl'}
         </Text>
-        <Text style={styles.balance}>$5055.00</Text>
+        <Text style={styles.balance}>$0</Text>
       </View>
     </ImageBackground>
   );

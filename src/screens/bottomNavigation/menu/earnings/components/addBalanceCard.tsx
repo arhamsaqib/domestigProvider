@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {BottomCard} from '../../../../../components/bottomCard';
 import {GreenCircle} from '../../../../../components/greenCircle';
@@ -13,13 +13,40 @@ import {MyButton} from '../../../../../components/button';
 interface Props {
   modalVisibility: boolean;
   onOutsidePress?(): void;
+  onWithdrawPress?(data: any): void;
 }
 
 export const AddBalanceCard = (props: Props) => {
+  const [amount, setAmount]: any = useState('');
+  const [holderName, setHolderName]: any = useState('');
+  const [accountNumber, setAccountNumber]: any = useState('');
+  const [routingNumber, setRoutingNumber]: any = useState('');
+
+  function onWithdrawPress() {
+    const data = {
+      country: 'US',
+      currency: 'USD',
+      name: holderName,
+      type: 'individual',
+      accountNumber: accountNumber,
+      routingNumber: routingNumber,
+    };
+    props.onWithdrawPress && props.onWithdrawPress(data);
+  }
+
+  function disabled() {
+    return (
+      amount.length < 1 ||
+      holderName.length < 5 ||
+      accountNumber.length < 5 ||
+      routingNumber.length < 3
+    );
+  }
+
   return (
     <BottomCard
       modalVisibility={props.modalVisibility}
-      style={{height: 609}}
+      style={{height: '90%'}}
       onOutsidePress={props.onOutsidePress}>
       <ScrollView style={{width: '100%'}}>
         <View style={{width: '100%', alignItems: 'center'}}>
@@ -38,7 +65,11 @@ export const AddBalanceCard = (props: Props) => {
           <Text style={[styles.field, {marginBottom: 5}]}>
             Enter the amount
           </Text>
-          <MyTextInput />
+          <MyTextInput
+            onChangeText={setAmount}
+            value={amount}
+            keyboardType="numeric"
+          />
         </View>
         <View style={{width: '90%', alignSelf: 'center'}}>
           <Text style={[styles.field, {marginBottom: 5}]}>
@@ -51,22 +82,38 @@ export const AddBalanceCard = (props: Props) => {
           <MyTextInput />
         </View>
         <View style={{width: '90%', alignSelf: 'center'}}>
+          <Text style={[styles.field, {marginBottom: 5}]}>Routing Number</Text>
+          <MyTextInput
+            value={routingNumber}
+            onChangeText={setRoutingNumber}
+            keyboardType="numeric"
+          />
+        </View>
+        {/* <View style={{width: '90%', alignSelf: 'center'}}>
           <Text style={[styles.field, {marginBottom: 5}]}>Branch Name</Text>
           <MyTextInput />
-        </View>
+        </View> */}
         <View style={{width: '90%', alignSelf: 'center'}}>
           <Text style={[styles.field, {marginBottom: 5}]}>
             Account Holder Name
           </Text>
-          <MyTextInput />
+          <MyTextInput onChangeText={setHolderName} value={holderName} />
         </View>
         <View style={{width: '90%', alignSelf: 'center'}}>
           <Text style={[styles.field, {marginBottom: 5}]}>Account Number</Text>
-          <MyTextInput />
+          <MyTextInput
+            onChangeText={setAccountNumber}
+            value={accountNumber}
+            keyboardType="numeric"
+          />
         </View>
 
         <View style={{width: '90%', alignSelf: 'center', marginVertical: 20}}>
-          <MyButton title="Withdraw Now" />
+          <MyButton
+            title="Withdraw Now"
+            onPress={onWithdrawPress}
+            disabled={disabled()}
+          />
         </View>
       </ScrollView>
     </BottomCard>

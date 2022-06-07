@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Alert,
+  AppState,
   FlatList,
   Linking,
   RefreshControl,
@@ -59,6 +60,7 @@ import {uploadImage} from '../../../api/uploadImage';
 import {useFocusEffect} from '@react-navigation/native';
 import {PusherConfig} from '../../../config/pusher-config';
 import Pusher from 'pusher-js/react-native';
+import {generatePayment} from '../../../api/paymentHistory';
 
 export const Home = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -87,6 +89,35 @@ export const Home = ({navigation}: any) => {
   const [timer, setTimer] = useState(false);
   const [modelToShow, setModelToShow]: any = useState('');
 
+  //---------App State
+
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        console.log('App has come to the foreground!');
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log('AppState', appState.current);
+      if (appState.current === 'background') {
+        setTimer(!timer);
+        saveProgress(!timer);
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  //-----------
+
   useEffect(() => {
     getData();
   }, []);
@@ -104,18 +135,18 @@ export const Home = ({navigation}: any) => {
         }
       });
     });
+    return;
   }
 
   async function getData() {
     reload();
     setLoader(true);
-
     const prov = await getProviderById(state.id).finally(() =>
       setLoader(false),
     );
     if (prov !== undefined) {
       setProvider(prov);
-      if (prov.avatar.length > 1) {
+      if (prov.avatar && prov.avatar.length > 1) {
         setAvatar(MEDIA_URL + prov.avatar);
       }
     }
@@ -128,6 +159,8 @@ export const Home = ({navigation}: any) => {
     const res = await getProviderIncomingRequests(state.id).finally(() =>
       setLoader(false),
     );
+    console.log(res, 'incoming');
+
     if (res !== undefined) {
       setRequests(res);
     }
@@ -190,6 +223,7 @@ export const Home = ({navigation}: any) => {
     const data = {
       provider_id: state.id,
       booking_id: selectedRequest.booking_id,
+      rate: selectedRequest.rate,
     };
     const res = await acceptIncomingRequest(data).finally(() => {
       getData();
@@ -215,6 +249,15 @@ export const Home = ({navigation}: any) => {
     };
     await generateCustomerNotification(n1data);
     await generateProviderNotification(n2data);
+
+    const pay = {
+      provider_id: state.id,
+      customer_id: selectedRequest.customer_id,
+      booking_id: selectedRequest.booking_id,
+      status: 'pending',
+    };
+    const payRes = await generatePayment(pay);
+    console.log(payRes, 'PaymentRes');
   }
 
   async function onCodeSubmit() {
@@ -254,6 +297,8 @@ export const Home = ({navigation}: any) => {
   }
 
   function renderIncoming({item}: any) {
+    //console.log(item, 'Incoming');
+
     return (
       <HistoryCard
         title={item.category_name + ' (' + item.bookingServices + ' )'}

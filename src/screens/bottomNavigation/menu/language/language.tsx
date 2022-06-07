@@ -5,6 +5,7 @@ import {BackIcon} from '../../../../components/backIcon';
 import {MyButton} from '../../../../components/button';
 import {PageNameText} from '../../../../components/texts/pageNameText';
 import {LanguageCard} from './components/languageCard';
+import {ICONS} from '../../../../constants/icons';
 
 export const Language = ({navigation}: any) => {
   return (
@@ -18,8 +19,8 @@ export const Language = ({navigation}: any) => {
         </View>
       </View>
       <View style={{width: '90%', marginTop: 10}}>
-        <LanguageCard name="English" />
-        <LanguageCard name="French" />
+        <LanguageCard name="English" image={ICONS.english} defaultActive />
+        <LanguageCard name="French" image={ICONS.french} />
       </View>
 
       <View style={styles.bottom}>

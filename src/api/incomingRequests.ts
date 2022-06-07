@@ -16,6 +16,7 @@ export async function rejectIncomingRequest(data: {
 export async function acceptIncomingRequest(data: {
   provider_id: string;
   booking_id: string;
+  rate?: string;
 }) {
   var endpoint = 'accept-request';
   const res = await post(endpoint, data);

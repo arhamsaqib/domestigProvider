@@ -18,6 +18,7 @@ import {MultipleOptions} from '../../components/multipleOptions';
 import {findPlaceById, placeAutocomplete} from '../../api/places';
 import {CountriesOptions} from '../../components/countriesOptions';
 import Toast from 'react-native-toast-message';
+import {createStripeAccount} from '../../api/stripe/stripeCustomer';
 
 export const Signup = ({navigation}: any) => {
   const [name, setName]: any = useState('');
@@ -41,22 +42,34 @@ export const Signup = ({navigation}: any) => {
       password.length < 8 ||
       confirmPassword.length < 8 ||
       name.length < 2 ||
-      country.length < 1 ||
-      location.length < 5
+      country.length < 1
+      //||location.length < 5
     );
   }
   async function createLaravelUser(uid: string) {
+    const sUser = await createStripeAccount({
+      email: email,
+      type: 'express',
+      business_type: 'individual',
+      country: 'US',
+    });
+    console.log(sUser, 'stripe user');
+
     const data = {
       name: name,
       email: email,
       fuid: uid,
       status: 'active',
-      location: location,
-      latitude: placeIinfo.geometry.location.lat,
-      longitude: placeIinfo.geometry.location.lng,
+      // location: location,
+      // latitude: placeIinfo.geometry.location.lat,
+      // longitude: placeIinfo.geometry.location.lng,
+      location: '123 Eastwood Drive, Virginia',
+      latitude: '32.161671',
+      longitude: '74.188309',
       phone: phone,
       country: country,
       working_status: 'online',
+      stripeId: sUser.id,
     };
     // console.log(data, 'send req');
     // return;
@@ -71,6 +84,14 @@ export const Signup = ({navigation}: any) => {
           id: user.id,
         }),
       );
+
+      const stripeUser = {
+        email: email,
+        type: 'standard',
+        business_type: 'individual',
+        country: country,
+      };
+
       navigation.navigate('bottomNav');
 
       //   Toast.show({

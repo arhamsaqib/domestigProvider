@@ -42,8 +42,12 @@ const share = require('../assets/icons/share.png');
 const wallet1 = require('../assets/icons/wallet.png');
 const docs = require('../assets/icons/docs.png');
 const services = require('../assets/icons/services.png');
+const english = require('../assets/icons/english.png');
+const french = require('../assets/icons/french.png');
 const ICONS = {
   wallet1,
+  english,
+  french,
   services,
   docs,
   share,

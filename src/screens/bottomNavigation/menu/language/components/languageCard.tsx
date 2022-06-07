@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {Image} from 'react-native';
 import {CheckMark} from '../../../../../components/checkmark';
 import {GreenCircle} from '../../../../../components/greenCircle';
 import {COLORS} from '../../../../../constants/colors';
@@ -7,16 +8,20 @@ import {FONTS} from '../../../../../constants/fonts';
 
 interface Props {
   name?: string;
+  image: any;
+  defaultActive?: boolean;
 }
 
 export const LanguageCard = (props: Props) => {
   return (
     <View style={styles.main}>
       <View style={styles.row1}>
-        <GreenCircle s41></GreenCircle>
+        <GreenCircle s41>
+          <Image source={props.image} style={{height: 41, width: 41}} />
+        </GreenCircle>
         <Text style={styles.name}>{props.name ?? 'L1'}</Text>
       </View>
-      <CheckMark circle />
+      <CheckMark circle defaultActive={props.defaultActive} />
     </View>
   );
 };

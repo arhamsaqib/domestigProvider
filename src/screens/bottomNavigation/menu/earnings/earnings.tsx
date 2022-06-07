@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {BackIcon} from '../../../../components/backIcon';
 import {MyButton} from '../../../../components/button';
@@ -11,14 +11,46 @@ import {TransactionsCard} from './components/transactionsCard';
 import {ScrollableView} from '../../../../helpers/scrollableView';
 import {AddBalanceCard} from './components/addBalanceCard';
 import {GlobalStyles} from '../../../../common/styles';
+import {createAccountToken} from '../../../../api/stripe/bankAccount';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {getProviderById} from '../../../../api/provider';
+import {updateStripeUserAccount} from '../../../../api/stripe/stripeCustomer';
 
 export const Earnings = ({navigation}: any) => {
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
+  const [user, setuser]: any = useState([]);
   const [show, setShow] = useState(false);
+  async function onWithdrawPress(data: any) {
+    console.log(data, 'in function');
+    const res = await createAccountToken(data);
+    console.log(res, 'Create card response');
+    if (res.id) {
+      const upd = await updateStripeUserAccount(
+        {account_token: res.id},
+        user.stripeId,
+      );
+      console.log(upd, 'Update Status');
+    }
+  }
+
+  async function getData() {
+    const res = await getProviderById(state.id);
+    if (res !== undefined) {
+      setuser(res);
+    }
+    console.log(res, 'res');
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <SafeAreaView style={GlobalStyles.screenMain}>
       <AddBalanceCard
         modalVisibility={show}
         onOutsidePress={() => setShow(false)}
+        onWithdrawPress={onWithdrawPress}
       />
       <ScrollableView>
         <View style={styles.topRow}>
