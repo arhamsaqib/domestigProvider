@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>285212739787-s7ti1oh284so9189t7qcqsdjeas0ehj8.apps.googleusercontent.com</string>
+	<string>285212739787-u45ue74agho9htfrv7a45b9b6svtqvls.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.285212739787-s7ti1oh284so9189t7qcqsdjeas0ehj8</string>
+	<string>com.googleusercontent.apps.285212739787-u45ue74agho9htfrv7a45b9b6svtqvls</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>285212739787-5ikv7n8pnbmdt2gov9dqgac64nk0ii2k.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.domestigProvider</string>
+	<string>com.arhamsaqib.domestigProvider</string>
 	<key>PROJECT_ID</key>
 	<string>domestig-27fe5</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:285212739787:ios:2cc81d2c5d9970f36fb34e</string>
+	<string>1:285212739787:ios:5bcb5a86c00430b36fb34e</string>
 </dict>
 </plist>

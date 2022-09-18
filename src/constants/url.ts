@@ -3,7 +3,6 @@
 //export const URL = "http://10.0.2.2:8000/api/"; //Android
 
 export const GOOGLE_MAPS_API_KEY = 'AIzaSyDlMojnSF1RqIUXwYb0IyHIZXXGodvLPQQ';
-
-export const URL = 'http://159.65.31.207/api/'; //REMOTE
-export const MEDIA_URL = 'http://159.65.31.207/'; //REMOTE
+export const URL = 'http://54.212.161.166/api/'; //REMOTE
+export const MEDIA_URL = 'http://54.212.161.166/'; //REMOTE
 export const STRIPE_BASE_URL = 'https://api.stripe.com'; //REMOTE
